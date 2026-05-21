@@ -7,14 +7,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#1a1208">
   <title>Daily Word · 365</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --parchment:    #faf7f0;
       --cream:        #f4efe4;
@@ -29,14 +26,11 @@
       --sage-pale:    #d8f0e6;
       --border:       #e6dece;
       --shadow-warm:  rgba(120, 90, 40, 0.10);
-
       --font-display: 'Playfair Display', Georgia, serif;
       --font-body:    'Lora', Georgia, serif;
       --font-ui:      'DM Sans', system-ui, sans-serif;
     }
-
     html { height: 100%; }
-
     body {
       font-family: var(--font-ui);
       background: var(--parchment);
@@ -47,8 +41,6 @@
       -webkit-tap-highlight-color: transparent;
       -webkit-font-smoothing: antialiased;
     }
-
-    /* ── NOISE TEXTURE OVERLAY ── */
     body::before {
       content: '';
       position: fixed; inset: 0;
@@ -57,8 +49,6 @@
       pointer-events: none;
       z-index: 0;
     }
-
-    /* ── DECORATIVE HEADER BAND ── */
     .top-band {
       background: var(--ink);
       padding: calc(env(safe-area-inset-top) + 18px) 24px 18px;
@@ -68,11 +58,7 @@
     .top-band::after {
       content: '';
       position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        90deg,
-        transparent, transparent 30px,
-        rgba(255,255,255,0.03) 30px, rgba(255,255,255,0.03) 31px
-      );
+      background: repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(255,255,255,0.03) 30px, rgba(255,255,255,0.03) 31px);
     }
     .top-band-inner {
       max-width: 520px;
@@ -82,330 +68,56 @@
       align-items: center;
       position: relative; z-index: 1;
     }
-    .app-title {
-      font-family: var(--font-display);
-      font-size: 28px;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -0.5px;
-      line-height: 1;
-    }
-    .app-title span {
-      color: var(--gold-bright);
-      font-style: italic;
-    }
-    .app-subtitle {
-      font-family: var(--font-ui);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
-      margin-top: 5px;
-    }
-    .btn-today {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--ink);
-      background: var(--gold-bright);
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      letter-spacing: 0.3px;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
+    .app-title { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1; }
+    .app-title span { color: var(--gold-bright); font-style: italic; }
+    .app-subtitle { font-family: var(--font-ui); font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-top: 5px; }
+    .btn-today { font-family: var(--font-ui); font-size: 13px; font-weight: 600; color: var(--ink); background: var(--gold-bright); border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; letter-spacing: 0.3px; transition: transform 0.15s ease; }
     .btn-today:active { transform: scale(0.95); }
-
-    /* ── PROGRESS STRIP ── */
-    .progress-strip {
-      background: var(--ink);
-      padding: 0 24px 16px;
-    }
-    .progress-strip-inner {
-      max-width: 520px;
-      margin: 0 auto;
-    }
-    .progress-meta {
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-ui);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 8px;
-    }
+    .progress-strip { background: var(--ink); padding: 0 24px 16px; }
+    .progress-strip-inner { max-width: 520px; margin: 0 auto; }
+    .progress-meta { display: flex; justify-content: space-between; font-family: var(--font-ui); font-size: 11px; font-weight: 600; letter-spacing: 0.5px; color: rgba(255,255,255,0.45); margin-bottom: 8px; }
     .progress-meta .done-count { color: var(--gold-bright); }
-    .progress-track {
-      height: 4px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--gold), var(--gold-bright));
-      border-radius: 2px;
-      width: 0%;
-      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* ── MAIN CONTENT ── */
-    .main {
-      max-width: 520px;
-      margin: 0 auto;
-      padding: 20px 16px calc(env(safe-area-inset-bottom) + 32px);
-      position: relative; z-index: 1;
-    }
-
-    /* ── CARD BASE ── */
-    .card {
-      background: var(--card);
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 24px var(--shadow-warm), 0 1px 3px rgba(0,0,0,0.04);
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    /* ── DAY NAVIGATOR ── */
-    .nav-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 14px;
-    }
-    .nav-btn {
-      width: 44px; height: 44px;
-      border-radius: 12px;
-      border: 1.5px solid var(--border);
-      background: var(--cream);
-      color: var(--ink);
-      font-size: 18px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s, transform 0.12s, opacity 0.2s;
-      user-select: none;
-    }
+    .progress-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-bright)); border-radius: 2px; width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    .main { max-width: 520px; margin: 0 auto; padding: 20px 16px calc(env(safe-area-inset-bottom) + 32px); position: relative; z-index: 1; }
+    .card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 4px 24px var(--shadow-warm), 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; margin-bottom: 16px; }
+    .nav-card { display: flex; align-items: center; justify-content: space-between; padding: 14px; }
+    .nav-btn { width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--cream); color: var(--ink); font-size: 18px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, transform 0.12s, opacity 0.2s; user-select: none; }
     .nav-btn:not(:disabled):active { transform: scale(0.92); background: var(--gold-pale); }
     .nav-btn:disabled { opacity: 0.28; cursor: not-allowed; }
-
     .day-info { text-align: center; flex: 1; }
-    .day-number {
-      font-family: var(--font-display);
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--ink);
-      line-height: 1;
-    }
-    .day-date {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--ink-muted);
-      letter-spacing: 0.5px;
-      margin-top: 3px;
-    }
-
-    /* ── READING CARD ── */
+    .day-number { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--ink); line-height: 1; }
+    .day-date { font-family: var(--font-ui); font-size: 11px; font-weight: 500; color: var(--ink-muted); letter-spacing: 0.5px; margin-top: 3px; }
     .reading-card { padding: 24px; }
-
-    .reading-label {
-      font-family: var(--font-ui);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--ink-light);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .reading-label::before {
-      content: '';
-      display: inline-block;
-      width: 20px; height: 1.5px;
-      background: var(--gold);
-    }
-
-    .reading-passages {
-      font-family: var(--font-display);
-      font-size: 22px;
-      font-weight: 600;
-      line-height: 1.45;
-      color: var(--ink);
-      margin-bottom: 20px;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    .reading-passages.done {
-      text-decoration: line-through;
-      color: var(--ink-light);
-      font-style: italic;
-    }
-
-    .reading-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn-complete {
-      flex: 1;
-      min-width: 130px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 13px 18px;
-      border-radius: 14px;
-      border: 1.5px solid var(--border);
-      background: var(--cream);
-      color: var(--ink-muted);
-      font-family: var(--font-ui);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .btn-complete .check-icon {
-      width: 20px; height: 20px;
-      border-radius: 50%;
-      border: 2px solid var(--ink-light);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px;
-      transition: all 0.2s;
-    }
-    .btn-complete.done {
-      background: var(--sage-pale);
-      border-color: var(--sage);
-      color: var(--sage);
-    }
-    .btn-complete.done .check-icon {
-      background: var(--sage);
-      border-color: var(--sage);
-      color: #fff;
-    }
+    .reading-label { font-family: var(--font-ui); font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-light); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .reading-label::before { content: ''; display: inline-block; width: 20px; height: 1.5px; background: var(--gold); }
+    .reading-passages { font-family: var(--font-display); font-size: 22px; font-weight: 600; line-height: 1.45; color: var(--ink); margin-bottom: 20px; cursor: pointer; transition: color 0.2s; animation: slide-in 0.25s ease; }
+    .reading-passages.done { text-decoration: line-through; color: var(--ink-light); font-style: italic; }
+    .reading-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-complete { flex: 1; min-width: 130px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 18px; border-radius: 14px; border: 1.5px solid var(--border); background: var(--cream); color: var(--ink-muted); font-family: var(--font-ui); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    .btn-complete .check-icon { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--ink-light); display: flex; align-items: center; justify-content: center; font-size: 11px; transition: all 0.2s; }
+    .btn-complete.done { background: var(--sage-pale); border-color: var(--sage); color: var(--sage); }
+    .btn-complete.done .check-icon { background: var(--sage); border-color: var(--sage); color: #fff; }
     .btn-complete:active { transform: scale(0.97); }
-
-    .btn-read {
-      flex: 1;
-      min-width: 130px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 13px 18px;
-      border-radius: 14px;
-      background: var(--ink);
-      color: #fff;
-      font-family: var(--font-ui);
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
+    .btn-read { flex: 1; min-width: 130px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 18px; border-radius: 14px; background: var(--ink); color: #fff; font-family: var(--font-ui); font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.18s; }
     .btn-read:active { transform: scale(0.97); opacity: 0.88; }
-    .btn-read .icon { font-size: 16px; }
-
-    /* ── DIVIDER ── */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 0 24px;
-    }
-
-    /* ── JOURNAL CARD ── */
+    .divider { height: 1px; background: var(--border); margin: 0 24px; }
     .journal-card { padding: 24px; }
-    .journal-label {
-      font-family: var(--font-ui);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--ink-light);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .journal-label::before {
-      content: '';
-      display: inline-block;
-      width: 20px; height: 1.5px;
-      background: var(--gold);
-    }
-    .journal-textarea {
-      width: 100%;
-      min-height: 140px;
-      background: var(--parchment);
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      font-family: var(--font-body);
-      font-size: 15px;
-      line-height: 1.65;
-      color: var(--ink);
-      resize: vertical;
-      outline: none;
-      transition: border-color 0.2s, background 0.2s;
-    }
+    .journal-label { font-family: var(--font-ui); font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-light); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .journal-label::before { content: ''; display: inline-block; width: 20px; height: 1.5px; background: var(--gold); }
+    .journal-textarea { width: 100%; min-height: 140px; background: var(--parchment); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px; font-family: var(--font-body); font-size: 15px; line-height: 1.65; color: var(--ink); resize: vertical; outline: none; transition: border-color 0.2s, background 0.2s; }
     .journal-textarea::placeholder { color: var(--ink-light); font-style: italic; }
-    .journal-textarea:focus {
-      border-color: var(--gold);
-      background: #fff;
-    }
-
-    /* ── VERSE OF THE DAY (optional flourish) ── */
-    .gold-rule {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 4px 24px 0;
-      opacity: 0.5;
-    }
-
-    /* ── COMPLETION FLASH ── */
-    @keyframes flash-green {
-      0% { box-shadow: 0 0 0 0 rgba(45, 106, 79, 0.4); }
-      60% { box-shadow: 0 0 0 12px rgba(45, 106, 79, 0); }
-      100% { box-shadow: none; }
-    }
+    .journal-textarea:focus { border-color: var(--gold); background: #fff; }
+    .gold-rule { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 4px 24px 0; opacity: 0.5; }
+    @keyframes flash-green { 0% { box-shadow: 0 0 0 0 rgba(45,106,79,0.4); } 60% { box-shadow: 0 0 0 12px rgba(45,106,79,0); } 100% { box-shadow: none; } }
     .card.flash { animation: flash-green 0.5s ease-out; }
-
-    /* ── PAGE TRANSITION ── */
-    @keyframes slide-in {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .reading-passages { animation: slide-in 0.25s ease; }
-
-    /* ── SWIPE HINT ── */
-    .swipe-hint {
-      text-align: center;
-      font-family: var(--font-ui);
-      font-size: 11px;
-      color: var(--ink-light);
-      margin-top: -8px;
-      margin-bottom: 8px;
-      letter-spacing: 0.3px;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (min-width: 520px) {
-      .main { padding-top: 28px; }
-      .app-title { font-size: 32px; }
-      .reading-passages { font-size: 24px; }
-    }
+    @keyframes slide-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .swipe-hint { text-align: center; font-family: var(--font-ui); font-size: 11px; color: var(--ink-light); margin-top: -8px; margin-bottom: 8px; letter-spacing: 0.3px; }
+    @media (min-width: 520px) { .main { padding-top: 28px; } .app-title { font-size: 32px; } .reading-passages { font-size: 24px; } }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
   <div class="top-band">
     <div class="top-band-inner">
       <div>
@@ -416,7 +128,6 @@
     </div>
   </div>
 
-  <!-- PROGRESS -->
   <div class="progress-strip">
     <div class="progress-strip-inner">
       <div class="progress-meta">
@@ -429,10 +140,7 @@
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main">
-
-    <!-- Day Navigator -->
     <div class="card nav-card">
       <button class="nav-btn" id="btn-prev" onclick="changeDay(-1)" aria-label="Previous day">&#8592;</button>
       <div class="day-info">
@@ -444,41 +152,30 @@
 
     <div class="swipe-hint" id="swipe-hint">Swipe left or right to navigate</div>
 
-    <!-- Reading + Actions -->
     <div class="card" id="reading-card">
       <div class="reading-card">
         <div class="reading-label" id="reading-label">Assigned Reading</div>
         <div class="reading-passages" id="reading-text">Loading…</div>
-
         <div class="reading-actions">
           <button class="btn-complete" id="btn-complete" onclick="toggleComplete()">
             <div class="check-icon" id="check-icon"></div>
             <span id="complete-label">Mark Complete</span>
           </button>
           <a href="#" id="btn-read" target="_blank" class="btn-read">
-            <span class="icon">📖</span> Read Now
+            <span>📖</span> Read Now
           </a>
         </div>
       </div>
       <div class="gold-rule"></div>
       <div class="divider" style="margin-top:0; opacity:0.4;"></div>
-
-      <!-- Journal -->
       <div class="journal-card">
         <div class="journal-label">Journal Notes</div>
-        <textarea
-          class="journal-textarea"
-          id="notes"
-          placeholder="What stood out to you today? Write a prayer or reflection…"
-          oninput="saveNote()"
-        ></textarea>
+        <textarea class="journal-textarea" id="notes" placeholder="What stood out to you today? Write a prayer or reflection…" oninput="saveNote()"></textarea>
       </div>
     </div>
-
   </div>
 
   <script>
-  // ── READING PLAN ──────────────────────────────────────────────────────────
   const plan = [
     "Start",
     "Gen 1-3, Matt 1","Gen 4-6, Matt 2","Gen 7-9, Matt 3","Gen 10-12, Matt 4","Gen 13-15, Matt 5","Gen 16-18, Matt 6","Gen 19-21, Matt 7",
@@ -536,104 +233,82 @@
     "Ps 150"
   ];
 
-  // ── STORAGE ───────────────────────────────────────────────────────────────
   const store = {
     get(k) { try { return JSON.parse(localStorage.getItem(k) || '{}'); } catch { return {}; } },
-    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { console.warn('Storage unavailable'); } }
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
   };
 
-  // ── STATE ─────────────────────────────────────────────────────────────────
   let currentDay = 1;
   let completed  = store.get('bible365_done');
   let notesData  = store.get('bible365_notes');
 
-  // ── UI REFS ───────────────────────────────────────────────────────────────
   const $ = id => document.getElementById(id);
   const el = {
-    dayNum:   $('day-number'),
-    dayDate:  $('day-date'),
-    rdgText:  $('reading-text'),
-    rdgLabel: $('reading-label'),
-    btnComplete: $('btn-complete'),
-    checkIcon:   $('check-icon'),
+    dayNum:        $('day-number'),
+    dayDate:       $('day-date'),
+    rdgText:       $('reading-text'),
+    rdgLabel:      $('reading-label'),
+    btnComplete:   $('btn-complete'),
+    checkIcon:     $('check-icon'),
     completeLabel: $('complete-label'),
-    btnRead:  $('btn-read'),
-    notes:    $('notes'),
-    btnPrev:  $('btn-prev'),
-    btnNext:  $('btn-next'),
-    doneCount:    $('done-count'),
-    pctLabel:     $('pct-label'),
-    progressFill: $('progress-fill'),
-    rdgCard:  $('reading-card'),
+    btnRead:       $('btn-read'),
+    notes:         $('notes'),
+    btnPrev:       $('btn-prev'),
+    btnNext:       $('btn-next'),
+    doneCount:     $('done-count'),
+    pctLabel:      $('pct-label'),
+    progressFill:  $('progress-fill'),
+    rdgCard:       $('reading-card'),
   };
 
-  // ── HELPERS ───────────────────────────────────────────────────────────────
-  const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-  function getToday() {
-    const now   = new Date();
-    const start = new Date(now.getFullYear(), 0, 0);
-    return Math.max(1, Math.min(365, Math.floor((now - start) / 86400000) + 1));
+  function dayToDate(d) {
+    const dt = new Date(new Date().getFullYear(), 0, d);
+    return DAYS[dt.getDay()] + ', ' + MONTHS[dt.getMonth()] + ' ' + dt.getDate();
   }
 
-  function dayToDate(dayNum) {
-    const d = new Date(new Date().getFullYear(), 0, dayNum);
-    return `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`;
-  }
-
-  // ── RENDER ────────────────────────────────────────────────────────────────
   function render() {
     currentDay = Math.max(1, Math.min(365, currentDay));
-    const verses   = plan[currentDay] || '—';
-    const isDone   = !!completed[currentDay];
+    const verses = plan[currentDay] || '—';
+    const isDone = !!completed[currentDay];
 
-    el.dayNum.textContent  = `Day ${currentDay}`;
+    el.dayNum.textContent  = 'Day ' + currentDay;
     el.dayDate.textContent = dayToDate(currentDay);
 
-    // animate reading text
     el.rdgText.style.animation = 'none';
-    el.rdgText.offsetHeight;       // reflow
-    el.rdgText.style.animation    = '';
+    el.rdgText.offsetHeight;
+    el.rdgText.style.animation = '';
     el.rdgText.textContent = verses;
     el.rdgText.className   = 'reading-passages' + (isDone ? ' done' : '');
-
-    // reading label
     el.rdgLabel.textContent = isDone ? '✓ Completed' : 'Assigned Reading';
 
-    // complete button
     el.btnComplete.className     = 'btn-complete' + (isDone ? ' done' : '');
     el.checkIcon.textContent     = isDone ? '✓' : '';
     el.completeLabel.textContent = isDone ? 'Completed' : 'Mark Complete';
 
-    // read link
-    el.btnRead.href = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(verses)}&version=NIV`;
-
-    // nav
+    el.btnRead.href = 'https://www.biblegateway.com/passage/?search=' + encodeURIComponent(verses) + '&version=NIV';
     el.btnPrev.disabled = currentDay === 1;
     el.btnNext.disabled = currentDay === 365;
-
-    // notes
     el.notes.value = notesData[currentDay] || '';
 
-    // progress
     const doneCount = Object.values(completed).filter(Boolean).length;
-    const pct       = Math.round((doneCount / 365) * 100);
+    const pct = Math.round((doneCount / 365) * 100);
     el.doneCount.textContent    = doneCount;
     el.pctLabel.textContent     = pct + '%';
     el.progressFill.style.width = pct + '%';
   }
 
-  // ── ACTIONS ───────────────────────────────────────────────────────────────
   function changeDay(delta) {
     currentDay = Math.max(1, Math.min(365, currentDay + delta));
-    store.set('bible365_currentDay', currentDay);
+    localStorage.setItem('bible365_currentDay', currentDay);
     render();
     $('swipe-hint').style.display = 'none';
   }
 
   function jumpToToday() {
-    currentDay = parseInt(store.get('bible365_currentDay') || '1');
+    currentDay = parseInt(localStorage.getItem('bible365_currentDay')) || 1;
     render();
   }
 
@@ -641,7 +316,6 @@
     completed[currentDay] = !completed[currentDay];
     store.set('bible365_done', completed);
     if (navigator.vibrate) navigator.vibrate(40);
-    // flash card
     el.rdgCard.classList.remove('flash');
     el.rdgCard.offsetHeight;
     if (completed[currentDay]) el.rdgCard.classList.add('flash');
@@ -653,19 +327,15 @@
     store.set('bible365_notes', notesData);
   }
 
-  // ── SWIPE (MOBILE) ────────────────────────────────────────────────────────
   let touchStartX = 0;
   document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
   document.addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 60) {
-      // only swipe on the main content area (not textarea)
-      if (document.activeElement !== el.notes) changeDay(dx < 0 ? 1 : -1);
-    }
+    if (Math.abs(dx) > 60 && document.activeElement !== el.notes) changeDay(dx < 0 ? 1 : -1);
   }, { passive: true });
 
-  // ── INIT ──────────────────────────────────────────────────────────────────
-  currentDay = parseInt(store.get('bible365_currentDay') || '1');
+  // Start at Day 1 on first visit, or wherever user left off
+  currentDay = parseInt(localStorage.getItem('bible365_currentDay')) || 1;
   render();
   </script>
 </body>
