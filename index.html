@@ -627,13 +627,13 @@
   // ── ACTIONS ───────────────────────────────────────────────────────────────
   function changeDay(delta) {
     currentDay = Math.max(1, Math.min(365, currentDay + delta));
+    store.set('bible365_currentDay', currentDay);
     render();
-    // hide swipe hint after first use
     $('swipe-hint').style.display = 'none';
   }
 
   function jumpToToday() {
-    currentDay = getToday();
+    currentDay = parseInt(store.get('bible365_currentDay') || '1');
     render();
   }
 
@@ -665,7 +665,7 @@
   }, { passive: true });
 
   // ── INIT ──────────────────────────────────────────────────────────────────
-  currentDay = getToday();
+  currentDay = parseInt(store.get('bible365_currentDay') || '1');
   render();
   </script>
 </body>
