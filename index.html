@@ -426,5 +426,6 @@ function nextOpen() { for (let i=currentDay;i<=TOTAL_DAYS;i++) if (!completed[i]
 el.btnToday.addEventListener('click', jumpToday); el.btnStartToday.addEventListener('click', setStartToday); el.startDate.addEventListener('change', changeStartDate); el.btnPrev.addEventListener('click', () => changeDay(-1)); el.btnNext.addEventListener('click', () => changeDay(1)); el.btnComplete.addEventListener('click', toggleComplete); el.notes.addEventListener('input', saveNote); el.btnCopy.addEventListener('click', copyPlan); el.btnNextOpen.addEventListener('click', nextOpen); el.btnGo.addEventListener('click', goToDay); el.goDay.addEventListener('keydown', e => { if (e.key === 'Enter') goToDay(); });
 render();
   </script>
+<p class="py-version" style="text-align:center;font:13px/1.5 system-ui,-apple-system,sans-serif;opacity:.75;margin:32px 16px 40px">Also available as a Python script: <a href="https://github.com/Speedkelvyn/Bible365/blob/main/bible365.py" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">bible365.py</a></p>
 </body>
 </html>
