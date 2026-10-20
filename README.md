@@ -1,5 +1,7 @@
 # Daily Word · Bible in a Year
 
+[![CI](https://github.com/Speedkelvyn/Bible365/actions/workflows/ci.yml/badge.svg)](https://github.com/Speedkelvyn/Bible365/actions/workflows/ci.yml)
+
 A one-year Bible reading plan in a single web page. Each day pairs an Old Testament, New Testament, Psalm and Proverbs reading, so the whole Bible is covered in 365 days with variety every day.
 
 **Live app:** https://speedkelvyn.github.io/Bible365/
@@ -29,3 +31,14 @@ Standard library only. Tests: `python -m pytest tests`.
 
 ## Built with
 HTML, CSS and vanilla JavaScript in a single file, hosted on GitHub Pages.
+
+## Development
+
+```bash
+pip install ruff pytest
+ruff check . && ruff format --check .   # lint and formatting
+pytest -q                               # tests
+npx html-validate@8.24.1 *.html         # HTML validation
+```
+
+Style is set by `ruff.toml`, `.prettierrc.json`, `.htmlvalidate.json` and `.editorconfig`; GitHub Actions runs the same checks on every push.

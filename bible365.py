@@ -17,6 +17,7 @@ marks, notes and daily prayer. Progress is saved to a small JSON file.
 
 Options: --progress FILE (default bible365_progress.json next to this script), --version NIV.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -30,7 +31,10 @@ import urllib.parse
 
 HERE = pathlib.Path(__file__).resolve().parent
 TOTAL_DAYS = 365
-_PLAN_RE = re.compile(r"\{\s*day:\s*(\d+),\s*ot:\s*'([^']*)',\s*nt:\s*'([^']*)',\s*ps:\s*'([^']*)',\s*pr:\s*'([^']*)'\s*\}")
+_PLAN_RE = re.compile(
+    r"""\{\s*day:\s*(\d+),\s*ot:\s*(["'])(.*?)\2,\s*nt:\s*(["'])(.*?)\4,"""
+    r"""\s*ps:\s*(["'])(.*?)\6,\s*pr:\s*(["'])(.*?)\8\s*,?\s*\}"""
+)  # matches the page's plan entries whether quotes are single or double
 
 
 # --------------------------------------------------------------------------- plan
@@ -39,7 +43,9 @@ _PLAN_RE = re.compile(r"\{\s*day:\s*(\d+),\s*ot:\s*'([^']*)',\s*nt:\s*'([^']*)',
 def load_plan(html_path: pathlib.Path = HERE / "index.html") -> list[dict]:
     """Read the 365-day reading plan from the web page."""
     text = html_path.read_text(encoding="utf-8")
-    plan = [dict(day=int(d), ot=ot, nt=nt, ps=ps, pr=pr) for d, ot, nt, ps, pr in _PLAN_RE.findall(text)]
+    plan = [
+        {"day": int(m[0]), "ot": m[2], "nt": m[4], "ps": m[6], "pr": m[8]} for m in _PLAN_RE.findall(text)
+    ]
     if len(plan) != TOTAL_DAYS or [p["day"] for p in plan] != list(range(1, TOTAL_DAYS + 1)):
         raise ValueError(f"expected days 1–{TOTAL_DAYS} in {html_path.name}, found {len(plan)}")
     return plan
@@ -61,14 +67,18 @@ def day_to_date(day: int, start: dt.date | None) -> dt.date | None:
 
 def gateway_url(reading: dict, version: str = "NIV") -> str:
     """Bible Gateway link that opens all four passages at once (as the page's 'Open full reading')."""
-    q = urllib.parse.urlencode({"search": f"{reading['ot']}; {reading['nt']}; {reading['ps']}; {reading['pr']}", "version": version})
+    q = urllib.parse.urlencode(
+        {"search": f"{reading['ot']}; {reading['nt']}; {reading['ps']}; {reading['pr']}", "version": version}
+    )
     return f"https://www.biblegateway.com/passage/?{q}"
 
 
 def prayer(reading: dict) -> str:
-    return (f"Father, as I read {reading['ot']}, {reading['nt']}, {reading['ps']}, and {reading['pr']}, "
-            "help me understand Your truth, worship You sincerely, walk in wisdom, and remain faithful "
-            "through this one-year journey. Amen.")
+    return (
+        f"Father, as I read {reading['ot']}, {reading['nt']}, {reading['ps']}, and {reading['pr']}, "
+        "help me understand Your truth, worship You sincerely, walk in wisdom, and remain faithful "
+        "through this one-year journey. Amen."
+    )
 
 
 def pace(completed: set[int], start: dt.date | None, today: dt.date | None = None) -> dict:
@@ -78,11 +88,19 @@ def pace(completed: set[int], start: dt.date | None, today: dt.date | None = Non
     expected = day_from_start(start, today)
     done = len(completed)
     if done >= expected:
-        return {"status": "On Pace", "expected": expected, "done": done,
-                "message": f"You have completed {done} days, and your calendar currently points to Day {expected}."}
+        return {
+            "status": "On Pace",
+            "expected": expected,
+            "done": done,
+            "message": f"You have completed {done} days, and your calendar currently points to Day {expected}.",
+        }
     gap = expected - done
-    return {"status": f"{gap} Behind", "expected": expected, "done": done,
-            "message": f"You are {gap} day{'' if gap == 1 else 's'} behind. Keep the daily rhythm and keep moving."}
+    return {
+        "status": f"{gap} Behind",
+        "expected": expected,
+        "done": done,
+        "message": f"You are {gap} day{'' if gap == 1 else 's'} behind. Keep the daily rhythm and keep moving.",
+    }
 
 
 def next_open(completed: set[int], current: int) -> int | None:
@@ -100,16 +118,24 @@ class Progress:
     def __init__(self, path: pathlib.Path):
         self.path = path
         data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
-        self.start: dt.date | None = dt.date.fromisoformat(data["start_date"]) if data.get("start_date") else None
+        self.start: dt.date | None = (
+            dt.date.fromisoformat(data["start_date"]) if data.get("start_date") else None
+        )
         self.completed: set[int] = {int(d) for d in data.get("completed", [])}
         self.notes: dict[int, str] = {int(k): v for k, v in data.get("notes", {}).items()}
 
     def save(self) -> None:
-        self.path.write_text(json.dumps({
-            "start_date": self.start.isoformat() if self.start else None,
-            "completed": sorted(self.completed),
-            "notes": {str(k): v for k, v in sorted(self.notes.items()) if v},
-        }, indent=2), encoding="utf-8")
+        self.path.write_text(
+            json.dumps(
+                {
+                    "start_date": self.start.isoformat() if self.start else None,
+                    "completed": sorted(self.completed),
+                    "notes": {str(k): v for k, v in sorted(self.notes.items()) if v},
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
 
     def today(self) -> int:
         return day_from_start(self.start) if self.start else 1
@@ -136,25 +162,56 @@ def show_day(plan: list[dict], prog: Progress, day: int, version: str) -> None:
 def export(plan: list[dict], prog: Progress, out: pathlib.Path, version: str) -> None:
     if out.suffix.lower() == ".ics":
         if not prog.start:
-            raise SystemExit("Set a start date first (python bible365.py start YYYY-MM-DD) so readings land on dates.")
+            raise SystemExit(
+                "Set a start date first (python bible365.py start YYYY-MM-DD) so readings land on dates."
+            )
         lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Bible365//Daily Word//EN", "CALSCALE:GREGORIAN"]
         stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         for r in plan:
             d = day_to_date(r["day"], prog.start)
-            lines += ["BEGIN:VEVENT", f"UID:bible365-day{r['day']}-{prog.start:%Y%m%d}@speedkelvyn.github.io",
-                      f"DTSTAMP:{stamp}", f"DTSTART;VALUE=DATE:{d:%Y%m%d}", f"DTEND;VALUE=DATE:{d + dt.timedelta(days=1):%Y%m%d}",
-                      f"SUMMARY:Bible Day {r['day']}: {r['ot']}\\, {r['nt']}\\, {r['ps']}\\, {r['pr']}",
-                      f"URL:{gateway_url(r, version)}", "END:VEVENT"]
+            lines += [
+                "BEGIN:VEVENT",
+                f"UID:bible365-day{r['day']}-{prog.start:%Y%m%d}@speedkelvyn.github.io",
+                f"DTSTAMP:{stamp}",
+                f"DTSTART;VALUE=DATE:{d:%Y%m%d}",
+                f"DTEND;VALUE=DATE:{d + dt.timedelta(days=1):%Y%m%d}",
+                f"SUMMARY:Bible Day {r['day']}: {r['ot']}\\, {r['nt']}\\, {r['ps']}\\, {r['pr']}",
+                f"URL:{gateway_url(r, version)}",
+                "END:VEVENT",
+            ]
         lines.append("END:VCALENDAR")
         out.write_text("\r\n".join(lines) + "\r\n", encoding="utf-8")
     else:
         with out.open("w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
-            w.writerow(["day", "date", "old_testament", "new_testament", "psalm", "proverbs", "completed", "note", "link"])
+            w.writerow(
+                [
+                    "day",
+                    "date",
+                    "old_testament",
+                    "new_testament",
+                    "psalm",
+                    "proverbs",
+                    "completed",
+                    "note",
+                    "link",
+                ]
+            )
             for r in plan:
                 d = day_to_date(r["day"], prog.start)
-                w.writerow([r["day"], d.isoformat() if d else "", r["ot"], r["nt"], r["ps"], r["pr"],
-                            "yes" if r["day"] in prog.completed else "", prog.notes.get(r["day"], ""), gateway_url(r, version)])
+                w.writerow(
+                    [
+                        r["day"],
+                        d.isoformat() if d else "",
+                        r["ot"],
+                        r["nt"],
+                        r["ps"],
+                        r["pr"],
+                        "yes" if r["day"] in prog.completed else "",
+                        prog.notes.get(r["day"], ""),
+                        gateway_url(r, version),
+                    ]
+                )
     print(f"Wrote {out} ({TOTAL_DAYS} days)")
 
 
@@ -163,8 +220,12 @@ def export(plan: list[dict], prog: Progress, out: pathlib.Path, version: str) ->
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", nargs="?", default="today",
-                    choices=["today", "day", "start", "done", "undo", "note", "pace", "next", "export"])
+    ap.add_argument(
+        "command",
+        nargs="?",
+        default="today",
+        choices=["today", "day", "start", "done", "undo", "note", "pace", "next", "export"],
+    )
     ap.add_argument("args", nargs="*")
     ap.add_argument("--progress", type=pathlib.Path, default=HERE / "bible365_progress.json")
     ap.add_argument("--version", default="NIV", help="Bible Gateway translation (default NIV)")
@@ -172,7 +233,9 @@ def main(argv=None) -> int:
 
     plan = load_plan()
     prog = Progress(a.progress)
-    day_arg = lambda i=0: clamp_day(int(a.args[i])) if len(a.args) > i and a.args[i].isdigit() else prog.today()
+    day_arg = lambda i=0: (
+        clamp_day(int(a.args[i])) if len(a.args) > i and a.args[i].isdigit() else prog.today()
+    )
 
     if a.command == "today":
         show_day(plan, prog, prog.today(), a.version)
@@ -187,7 +250,9 @@ def main(argv=None) -> int:
         d = day_arg()
         (prog.completed.add if a.command == "done" else prog.completed.discard)(d)
         prog.save()
-        print(f"Day {d} marked {'complete' if a.command == 'done' else 'incomplete'}. {pace(prog.completed, prog.start)['message']}")
+        print(
+            f"Day {d} marked {'complete' if a.command == 'done' else 'incomplete'}. {pace(prog.completed, prog.start)['message']}"
+        )
     elif a.command == "note":
         if a.args and a.args[0].isdigit():
             d, text = int(a.args[0]), " ".join(a.args[1:])

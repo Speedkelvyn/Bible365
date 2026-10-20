@@ -3,7 +3,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
-import bible365 as B  # noqa: E402
+import bible365 as B
 
 
 def test_plan_has_365_days_with_four_readings():
@@ -17,8 +17,8 @@ def test_start_date_mapping():
     start = dt.date(2026, 1, 1)
     assert B.day_from_start(start, dt.date(2026, 1, 1)) == 1
     assert B.day_from_start(start, dt.date(2026, 2, 1)) == 32
-    assert B.day_from_start(start, dt.date(2025, 12, 1)) == 1      # before start: clamp to day 1
-    assert B.day_from_start(start, dt.date(2027, 6, 1)) == 365     # after the year: clamp to 365
+    assert B.day_from_start(start, dt.date(2025, 12, 1)) == 1  # before start: clamp to day 1
+    assert B.day_from_start(start, dt.date(2027, 6, 1)) == 365  # after the year: clamp to 365
     assert B.day_to_date(32, start) == dt.date(2026, 2, 1)
 
 
