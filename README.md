@@ -10,6 +10,7 @@ A one-year Bible reading plan in a single web page. Each day pairs an Old Testam
 - **Calendar-mapped plan:** pick a start date and every reading lines up with a real day
 - **Pace tracking:** see whether you are ahead, on track or behind
 - **Mark complete:** progress is saved in your browser
+- **Read in the app (KJV):** tap any reading to open the full King James chapter, verse by verse; the text is bundled in `kjv.json`, so it works without an outside service
 - **Open full reading:** each passage links straight to Bible Gateway
 - **Daily prayer and journal notes** alongside the readings
 

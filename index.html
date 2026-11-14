@@ -1,100 +1,1257 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Daily Word · Bible in a Year</title>
-  <meta name="theme-color" content="#20150e">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {--bg:#f8f4ec;--bg-soft:#efe5d3;--surface:rgba(255,252,247,.92);--text:#2a1d13;--muted:#6f5d4e;--faint:#a48f7a;--gold:#c7921d;--sage:#2f6f57;--plum:#7c4a57;--border:rgba(96,65,35,.14);--shadow:0 18px 40px rgba(80,53,27,.08);--font-display:'Playfair Display',Georgia,serif;--font-body:'Source Serif 4',Georgia,serif;--font-ui:'Inter',system-ui,sans-serif;}
-    body{min-height:100dvh;font-family:var(--font-ui);color:var(--text);background:radial-gradient(circle at 0% 0%,rgba(242,223,176,.8),transparent 30%),radial-gradient(circle at 100% 10%,rgba(220,239,230,.8),transparent 28%),linear-gradient(180deg,#fbf8f3 0%,var(--bg) 55%,var(--bg-soft) 100%);-webkit-font-smoothing:antialiased;}
-    .wrap,.hero-inner{max-width:640px;margin:0 auto} .hero{background:linear-gradient(135deg,#24170e,#4a2f1a 58%,#6a4a2e);color:#fff9ef;padding:28px 20px 26px;box-shadow:0 12px 32px rgba(36,23,14,.22)} .hero-inner{display:flex;justify-content:space-between;gap:16px;align-items:flex-start} .title{font-family:var(--font-display);font-size:33px;line-height:1} .title span{color:#f1ca72;font-style:italic} .subtitle{margin-top:8px;font-size:11px;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,249,239,.7)} .hero-note{margin-top:12px;font-size:14px;line-height:1.55;color:rgba(255,249,239,.84);max-width:420px}
-    .btn-top{min-height:46px;padding:11px 16px;border:none;border-radius:999px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#e7be64);color:#2d2013;font:700 13px var(--font-ui);box-shadow:0 8px 18px rgba(199,146,29,.24)} .main{padding:18px 14px 36px} .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);backdrop-filter:blur(10px);margin-bottom:16px;overflow:hidden} .pad{padding:20px}
-    .label{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--faint);margin-bottom:12px} .label::before{content:'';width:20px;height:1.5px;background:linear-gradient(90deg,var(--gold),transparent)} .row,.btn-row,.stats-grid,.segments{display:flex;gap:10px;flex-wrap:wrap} .input,.go-input{min-height:46px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.78);color:var(--text);padding:12px 14px;font:500 14px var(--font-ui);outline:none;flex:1 1 180px}
-    .btn,.btn-secondary,.btn-primary{min-height:46px;border-radius:14px;padding:11px 16px;border:1px solid var(--border);cursor:pointer;font:600 14px var(--font-ui)} .btn-primary{background:linear-gradient(135deg,var(--gold),#e8c670);color:#2a1d13;border:none} .btn-secondary{background:linear-gradient(180deg,#fffaf1,#efe3cf);color:var(--muted)} .btn{background:linear-gradient(135deg,#2b1d13,#5a3e28);color:#fffaf1;border:none}
-    .helper{font-size:13px;line-height:1.55;color:var(--muted);margin-top:10px} .stats-grid>div{flex:1 1 160px;min-width:160px;border-radius:18px;padding:14px;border:1px solid rgba(96,65,35,.1);background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(242,223,176,.18))} .stat-k{font-size:11px;text-transform:uppercase;letter-spacing:1.6px;color:var(--faint)} .stat-v{font-family:var(--font-display);font-size:25px;margin-top:8px} .stat-d{margin-top:4px;font-size:13px;color:var(--muted)}
-    .nav-card{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px} .nav{width:46px;height:46px;border-radius:14px;border:1px solid var(--border);background:linear-gradient(180deg,#fff7e6,#f2e4ca);font-size:18px;font-weight:700;color:var(--text);cursor:pointer} .nav:disabled{opacity:.35;cursor:not-allowed} .day-center{flex:1;text-align:center} .day-top{font-size:11px;text-transform:uppercase;letter-spacing:1.8px;color:var(--faint)} .day-big{font-family:var(--font-display);font-size:30px;margin-top:4px} .day-date{font-size:12px;color:var(--muted);margin-top:6px}
-    .reading-head{background:linear-gradient(135deg,rgba(242,223,176,.52),rgba(220,239,230,.5));padding:22px 22px 18px;border-bottom:1px solid rgba(96,65,35,.08)} .reading-title{font-family:var(--font-display);font-size:29px;line-height:1.15} .reading-sub{margin-top:8px;font-size:14px;line-height:1.55;color:var(--muted)} .theme-band{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px} .chip{padding:8px 12px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid rgba(124,74,87,.12);background:rgba(124,74,87,.07);color:var(--plum)}
-    .reading-body{padding:22px} .segment{border-radius:18px;padding:16px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.86),rgba(239,229,211,.46));flex:1 1 250px;min-width:250px} .segment h3{font:700 16px var(--font-ui);color:var(--text)} .segment p{margin-top:8px;font:400 20px/1.55 var(--font-body);color:var(--text)} .segment small{display:block;margin-top:6px;font-size:12px;color:var(--muted)}
-    .complete,.readnow{flex:1 1 160px;min-height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;font:600 14px var(--font-ui);cursor:pointer;padding:12px 16px} .complete{border:1px solid var(--border);background:linear-gradient(180deg,#fff9ee,#efe4d2);color:var(--muted)} .complete.done{background:linear-gradient(180deg,#eaf8f0,#d6efe2);color:var(--sage);border-color:rgba(47,111,87,.18)} .readnow{background:linear-gradient(135deg,#2d2015,#5a3f27);color:#fffaf1}
-    .divider{height:1px;margin:0 22px;background:linear-gradient(90deg,transparent,rgba(96,65,35,.16),transparent)} textarea{width:100%;min-height:144px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,.76);padding:16px;resize:vertical;font:400 20px/1.58 var(--font-body);color:var(--text);outline:none} .prayer-box{margin-top:16px;border-radius:18px;padding:18px;border:1px solid rgba(124,74,87,.12);background:linear-gradient(180deg,rgba(239,216,223,.35),rgba(242,223,176,.2))} .prayer-title{font-family:var(--font-display);font-size:22px;color:var(--plum)} .prayer-text{margin-top:10px;font:400 20px/1.65 var(--font-body);color:var(--text)}
-    .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(22px);opacity:0;pointer-events:none;background:rgba(42,29,19,.94);color:#fffaf1;padding:12px 16px;border-radius:999px;font-size:13px;transition:all .25s ease} .toast.show{opacity:1;transform:translateX(-50%) translateY(0)} button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-  </style>
-</head>
-<body>
-  <div class="hero"><div class="hero-inner"><div><div class="title">Daily <span>Word</span></div><div class="subtitle">Bible In A Year · 365 Day Plan</div><div class="hero-note" id="hero-note">A balanced one-year plan with daily Old Testament, New Testament, Psalm, and Proverbs readings, following the structure used by established Bible-in-a-year plans.</div></div><button class="btn-top" id="btn-today" type="button">Today</button></div></div>
-  <div class="wrap main">
-    <div class="card pad"><div class="label">Plan setup</div><div class="row"><input class="input" type="date" id="start-date" aria-label="Choose your reading start date"><button class="btn-primary" id="btn-start-today" type="button">Start Today</button></div><div class="helper" id="setup-help">Choose a start date so each reading maps to your calendar.</div>
-      <div class="row" style="margin-top:14px;"><input class="input" type="number" min="0" id="pause-after" aria-label="Paused after day" placeholder="Paused after day"><input class="input" type="number" min="0" id="skip-days" aria-label="Days paused" placeholder="Days paused"><button class="btn-secondary" id="btn-skip-save" type="button">Save pause</button></div>
-      <div class="helper" id="pause-help"></div></div>
-    <div class="card pad"><div class="label">Why this works</div><div class="helper">This four-part daily structure is widely used in Bible-in-a-year plans because it gives variety and balance while helping readers complete the whole Bible over one year.</div><div class="stats-grid" style="margin-top:12px;"><div><div class="stat-k">Structure</div><div class="stat-v">4 readings</div><div class="stat-d">Old Testament, New Testament, Psalm, and Proverbs every day.</div></div><div><div class="stat-k">Goal</div><div class="stat-v">365 days</div><div class="stat-d">A fixed one-year path designed to help you finish the Bible in a year.</div></div><div><div class="stat-k">Pace</div><div class="stat-v" id="pace-badge">Ready</div><div class="stat-d" id="pace-summary">Set your start date to see whether you are on pace.</div></div></div></div>
-    <div class="card nav-card"><button class="nav" id="btn-prev" type="button" aria-label="Previous day">&#8592;</button><div class="day-center"><div class="day-top">Your Bible in a year journey</div><div class="day-big" id="day-number">Day 1</div><div class="day-date" id="day-date"></div></div><button class="nav" id="btn-next" type="button" aria-label="Next day">&#8594;</button></div>
-    <div class="card" id="reading-card"><div class="reading-head"><div class="label" style="margin-bottom:10px; color:var(--plum);">Today’s plan covers this</div><div class="reading-title" id="reading-title">Read the Bible with balance and consistency</div><div class="reading-sub" id="reading-sub">Each day includes an Old Testament reading, a New Testament reading, a Psalm, and a Proverbs reading to keep you moving through the whole Bible with variety.</div><div class="theme-band" id="theme-band"></div></div><div class="reading-body"><div class="segments"><div class="segment"><h3>Old Testament</h3><p id="ot-text"></p><small>Main storyline reading for the day.</small></div><div class="segment"><h3>New Testament</h3><p id="nt-text"></p><small>Gospel and church reading for the day.</small></div><div class="segment"><h3>Psalm</h3><p id="ps-text"></p><small>Prayer and worship reading for the day.</small></div><div class="segment"><h3>Proverbs</h3><p id="pr-text"></p><small>Wisdom reading for everyday life.</small></div></div><div class="btn-row" style="margin-top:18px;"><button class="complete" id="btn-complete" type="button"><span id="check-mark">○</span><span id="complete-label">Mark Complete</span></button><a href="#" class="readnow" id="btn-read" target="_blank" rel="noopener noreferrer">Open full reading</a></div><div class="prayer-box"><div class="label" style="margin-bottom:10px; color:var(--plum);">Daily Prayer</div><div class="prayer-title" id="prayer-title">Prayer for steady reading</div><div class="prayer-text" id="prayer-text">Lord, help me receive Your Word with faith, attention, and obedience today. Teach me through every part of today’s reading and keep me faithful through the year.</div></div></div><div class="divider"></div><div class="pad"><div class="label">Journal Notes</div><textarea id="notes" placeholder="What stood out today? What did God show you through the Old Testament, New Testament, Psalm, or Proverbs reading?"></textarea></div></div>
-    <div class="card pad"><div class="label">Quick actions</div><div class="btn-row"><button class="btn-secondary" id="btn-copy" type="button">Copy today’s plan</button><button class="btn-secondary" id="btn-next-open" type="button">Next unfinished day</button></div><div class="row" style="margin-top:10px;"><input class="go-input" type="number" min="1" id="go-day" placeholder="Go to day number"><button class="btn" id="btn-go" type="button">Go</button></div></div>
-  </div>
-  <div class="toast" id="toast"></div>
-  <script>
-// Reading plan is generated from the canonical book/chapter lists (identical to the original 365-day table).
-const OT_BOOKS = [['Genesis',50],['Exodus',40],['Leviticus',27],['Numbers',36],['Deuteronomy',34],['Joshua',24],['Judges',21],['Ruth',4],['1 Samuel',31],['2 Samuel',24],['1 Kings',22],['2 Kings',25],['1 Chronicles',29]];
-const NT_BOOKS = [['Matthew',28],['Mark',16],['Luke',24],['John',21],['Acts',28],['Romans',16],['1 Corinthians',16],['2 Corinthians',13],['Galatians',6],['Ephesians',6],['Philippians',4],['Colossians',4],['1 Thessalonians',5],['2 Thessalonians',3],['1 Timothy',6],['2 Timothy',4],['Titus',3],['Philemon',1],['Hebrews',13],['James',5],['1 Peter',5],['2 Peter',3],['1 John',5],['2 John',1],['3 John',1],['Jude',1],['Revelation',22]];
-const flat = books => books.flatMap(([name, n]) => Array.from({length:n}, (_, i) => `${name} ${i+1}`));
-const OT_LIST = flat(OT_BOOKS), NT_LIST = flat(NT_BOOKS);
-const readingPlan = Array.from({length:365}, (_, i) => ({ day:i+1, ot:OT_LIST[i], nt:NT_LIST[i % NT_LIST.length], ps:`Psalm ${(i % 150)+1}`, pr:`Proverbs ${(i % 31)+1}` }));
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Daily Word · Bible in a Year</title>
+    <meta name="theme-color" content="#0b2545" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --navy: #0b2545;
+        --navy-2: #13315c;
+        --ink: #1b2430;
+        --body: #3f4a5a;
+        --muted: #6b7584;
+        --line: #e3e7ed;
+        --bg: #ffffff;
+        --bg-alt: #f5f7fa;
+        --accent: #b08d3c;
+        --pos: #11804a;
+        --pos-soft: #e7f6ee;
+        --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+        --serif: "Source Serif 4", Georgia, serif;
+        /* legacy names used inline */
+        --text: var(--ink);
+        --faint: var(--muted);
+        --gold: var(--accent);
+        --sage: var(--pos);
+        --plum: var(--navy-2);
+        --border: var(--line);
+        --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 32px -12px rgba(16, 24, 40, 0.12);
+        color-scheme: light;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        min-height: 100dvh;
+        font: 16px/1.65 var(--sans);
+        color: var(--body);
+        background: var(--bg-alt);
+        -webkit-font-smoothing: antialiased;
+      }
+      h1,
+      h2,
+      h3 {
+        color: var(--ink);
+      }
+      .wrap,
+      .hero-inner {
+        max-width: 640px;
+        margin: 0 auto;
+      }
+      .hero {
+        background: var(--navy);
+        color: #dbe4f3;
+        padding: 30px 20px 28px;
+        border-bottom: 3px solid var(--accent);
+      }
+      .hero-inner {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      .title {
+        font: 600 34px/1.1 var(--serif);
+        color: #fff;
+        letter-spacing: -0.015em;
+      }
+      .title span {
+        color: #e0c27a;
+        font-style: italic;
+      }
+      .subtitle {
+        margin-top: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #e0c27a;
+      }
+      .hero-note {
+        margin-top: 12px;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #b9c7dd;
+        max-width: 440px;
+      }
+      .btn-top {
+        min-height: 44px;
+        padding: 10px 18px;
+        border: 1px solid #fff;
+        border-radius: 6px;
+        cursor: pointer;
+        background: #fff;
+        color: var(--navy);
+        font: 600 14px var(--sans);
+        transition: background 0.15s;
+      }
+      .btn-top:hover {
+        background: #e8efff;
+      }
+      .main {
+        padding: 20px 14px 40px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 16px;
+        overflow: hidden;
+      }
+      .pad {
+        padding: 22px;
+      }
+      .label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 12px;
+      }
+      .row,
+      .btn-row,
+      .stats-grid,
+      .segments {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .input,
+      .go-input {
+        min-height: 44px;
+        border-radius: 6px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+        padding: 10px 14px;
+        font: 500 14px var(--sans);
+        outline: none;
+        flex: 1 1 180px;
+      }
+      .input:focus,
+      .go-input:focus,
+      textarea:focus {
+        border-color: var(--navy-2);
+      }
+      .btn,
+      .btn-secondary,
+      .btn-primary {
+        min-height: 44px;
+        border-radius: 6px;
+        padding: 10px 18px;
+        border: 1px solid var(--line);
+        cursor: pointer;
+        font: 600 14px var(--sans);
+        transition:
+          background 0.15s,
+          border-color 0.15s;
+      }
+      .btn-primary {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+      .btn-primary:hover {
+        background: var(--navy-2);
+      }
+      .btn-secondary {
+        background: #fff;
+        color: var(--ink);
+      }
+      .btn-secondary:hover {
+        border-color: var(--navy-2);
+      }
+      .btn {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+      .btn:hover {
+        background: var(--navy-2);
+      }
+      .fld {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1 1 140px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .fld .input {
+        flex: none;
+        text-transform: none;
+        letter-spacing: 0;
+      }
+      .helper {
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--muted);
+        margin-top: 10px;
+      }
+      .stats-grid > div {
+        flex: 1 1 160px;
+        min-width: 160px;
+        border-radius: 10px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        background: var(--bg-alt);
+      }
+      .stat-k {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+      .stat-v {
+        font: 600 24px var(--serif);
+        color: var(--navy);
+        margin-top: 6px;
+      }
+      .stat-d {
+        margin-top: 4px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .nav-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 14px;
+      }
+      .nav {
+        width: 44px;
+        height: 44px;
+        border-radius: 6px;
+        border: 1px solid var(--line);
+        background: #fff;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--navy);
+        cursor: pointer;
+        transition: border-color 0.15s;
+      }
+      .nav:hover:not(:disabled) {
+        border-color: var(--navy-2);
+      }
+      .nav:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+      .day-center {
+        flex: 1;
+        text-align: center;
+      }
+      .day-top {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+      .day-big {
+        font: 600 32px/1.2 var(--serif);
+        color: var(--navy);
+        margin-top: 4px;
+      }
+      .day-date {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .reading-head {
+        background: var(--bg-alt);
+        padding: 24px 22px 20px;
+        border-bottom: 1px solid var(--line);
+      }
+      .reading-title {
+        font: 600 28px/1.15 var(--serif);
+        color: var(--ink);
+      }
+      .reading-sub {
+        margin-top: 8px;
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+      .theme-band {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .chip {
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+      }
+      .reading-body {
+        padding: 22px;
+      }
+      .segment {
+        border-radius: 10px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        background: #fff;
+        flex: 1 1 250px;
+        min-width: 250px;
+        border-top: 3px solid var(--navy);
+      }
+      .segment h3 {
+        font: 600 12px var(--sans);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .segment p {
+        margin-top: 8px;
+        font: 600 22px/1.4 var(--serif);
+        color: var(--ink);
+      }
+      .segment small {
+        display: block;
+        margin-top: 6px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .seg-btn {
+        cursor: pointer;
+        position: relative;
+        padding-right: 28px;
+        border-radius: 6px;
+      }
+      .seg-btn::after {
+        content: "";
+        position: absolute;
+        right: 4px;
+        top: 6px;
+        width: 9px;
+        height: 9px;
+        border-right: 2px solid var(--muted);
+        border-bottom: 2px solid var(--muted);
+        transform: rotate(45deg);
+        transition: transform 0.2s;
+      }
+      .segment.open {
+        flex-basis: 100%;
+      }
+      .segment.open .seg-btn::after {
+        transform: rotate(-135deg);
+        top: 10px;
+      }
+      .seg-hint {
+        display: block;
+        margin-top: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .segment.open .seg-hint {
+        display: none;
+      }
+      .verses {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+        font: 400 19px/1.75 var(--serif);
+        color: var(--ink);
+        max-height: 60vh;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .verses .v {
+        display: inline;
+      }
+      .verses sup {
+        font: 700 11px var(--sans);
+        color: var(--accent);
+        margin-right: 3px;
+        vertical-align: super;
+      }
+      .verses .vmsg {
+        font: 500 14px var(--sans);
+        color: var(--muted);
+      }
+      .verses .vmsg button {
+        font: 600 14px var(--sans);
+        color: var(--navy-2);
+        background: none;
+        border: none;
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 0;
+      }
+      .verses .vsrc {
+        display: block;
+        margin-top: 12px;
+        font: 500 12px var(--sans);
+        color: var(--muted);
+      }
+      .complete,
+      .readnow {
+        flex: 1 1 160px;
+        min-height: 48px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        text-decoration: none;
+        font: 600 14px var(--sans);
+        cursor: pointer;
+        padding: 12px 16px;
+        transition:
+          background 0.15s,
+          border-color 0.15s;
+      }
+      .complete {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+      }
+      .complete:hover {
+        border-color: var(--navy-2);
+      }
+      .complete.done {
+        background: var(--pos-soft);
+        color: var(--pos);
+        border-color: #bfe3cf;
+      }
+      .readnow {
+        background: var(--navy);
+        color: #fff;
+        border: 1px solid var(--navy);
+      }
+      .readnow:hover {
+        background: var(--navy-2);
+      }
+      .divider {
+        height: 1px;
+        margin: 0 22px;
+        background: var(--line);
+      }
+      textarea {
+        width: 100%;
+        min-height: 144px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: #fff;
+        padding: 16px;
+        resize: vertical;
+        font: 400 18px/1.6 var(--serif);
+        color: var(--ink);
+        outline: none;
+      }
+      .prayer-box {
+        margin-top: 16px;
+        border-radius: 10px;
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--accent);
+        background: var(--bg-alt);
+      }
+      .prayer-title {
+        font: 600 20px var(--serif);
+        color: var(--navy);
+      }
+      .prayer-text {
+        margin-top: 10px;
+        font: 400 18px/1.7 var(--serif);
+        color: var(--body);
+      }
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%) translateY(22px);
+        opacity: 0;
+        pointer-events: none;
+        background: var(--navy);
+        color: #fff;
+        padding: 12px 18px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.25s ease;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="hero-inner">
+        <div>
+          <div class="title">Daily <span>Word</span></div>
+          <div class="subtitle">Bible In A Year · 365 Day Plan</div>
+          <div class="hero-note" id="hero-note">
+            A balanced one-year plan with daily Old Testament, New Testament, Psalm, and Proverbs readings,
+            following the structure used by established Bible-in-a-year plans.
+          </div>
+        </div>
+        <button class="btn-top" id="btn-today" type="button">Today</button>
+      </div>
+    </div>
+    <div class="wrap main">
+      <div class="card pad">
+        <div class="label">Plan setup</div>
+        <div class="row">
+          <input
+            class="input"
+            type="date"
+            id="start-date"
+            aria-label="Choose your reading start date"
+          /><button class="btn-primary" id="btn-start-today" type="button">Start Today</button>
+        </div>
+        <div class="helper" id="setup-help">Choose a start date so each reading maps to your calendar.</div>
+        <div class="row" style="margin-top: 14px">
+          <label class="fld"
+            ><span>Paused after day</span
+            ><input
+              class="input"
+              type="number"
+              min="0"
+              id="pause-after"
+              placeholder="Paused after day" /></label
+          ><label class="fld"
+            ><span>Days paused</span
+            ><input class="input" type="number" min="0" id="skip-days" placeholder="Days paused" /></label
+          ><button class="btn-secondary" id="btn-skip-save" type="button">Save pause</button>
+        </div>
+        <div class="helper" id="pause-help"></div>
+      </div>
+      <div class="card pad">
+        <div class="label">Why this works</div>
+        <div class="helper">
+          This four-part daily structure is widely used in Bible-in-a-year plans because it gives variety and
+          balance while helping readers complete the whole Bible over one year.
+        </div>
+        <div class="stats-grid" style="margin-top: 12px">
+          <div>
+            <div class="stat-k">Structure</div>
+            <div class="stat-v">4 readings</div>
+            <div class="stat-d">Old Testament, New Testament, Psalm, and Proverbs every day.</div>
+          </div>
+          <div>
+            <div class="stat-k">Goal</div>
+            <div class="stat-v">365 days</div>
+            <div class="stat-d">A fixed one-year path designed to help you finish the Bible in a year.</div>
+          </div>
+          <div>
+            <div class="stat-k">Pace</div>
+            <div class="stat-v" id="pace-badge">Ready</div>
+            <div class="stat-d" id="pace-summary">Set your start date to see whether you are on pace.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card nav-card">
+        <button class="nav" id="btn-prev" type="button" aria-label="Previous day">&#8592;</button>
+        <div class="day-center">
+          <div class="day-top">Your Bible in a year journey</div>
+          <div class="day-big" id="day-number">Day 1</div>
+          <div class="day-date" id="day-date"></div>
+        </div>
+        <button class="nav" id="btn-next" type="button" aria-label="Next day">&#8594;</button>
+      </div>
+      <div class="card" id="reading-card">
+        <div class="reading-head">
+          <div class="label" style="margin-bottom: 10px">Today’s plan covers this</div>
+          <div class="reading-title" id="reading-title">Read the Bible with balance and consistency</div>
+          <div class="reading-sub" id="reading-sub">
+            Each day includes an Old Testament reading, a New Testament reading, a Psalm, and a Proverbs
+            reading to keep you moving through the whole Bible with variety.
+          </div>
+          <div class="theme-band" id="theme-band"></div>
+        </div>
+        <div class="reading-body">
+          <div class="segments">
+            <div class="segment" id="seg-ot">
+              <div class="seg-btn" role="button" tabindex="0" aria-expanded="false" data-k="ot">
+                <h3>Old Testament</h3>
+                <p id="ot-text"></p>
+                <small>Main storyline reading for the day.</small
+                ><span class="seg-hint">Tap to read · KJV</span>
+              </div>
+              <div class="verses" id="v-ot" hidden></div>
+            </div>
+            <div class="segment" id="seg-nt">
+              <div class="seg-btn" role="button" tabindex="0" aria-expanded="false" data-k="nt">
+                <h3>New Testament</h3>
+                <p id="nt-text"></p>
+                <small>Gospel and church reading for the day.</small
+                ><span class="seg-hint">Tap to read · KJV</span>
+              </div>
+              <div class="verses" id="v-nt" hidden></div>
+            </div>
+            <div class="segment" id="seg-ps">
+              <div class="seg-btn" role="button" tabindex="0" aria-expanded="false" data-k="ps">
+                <h3>Psalm</h3>
+                <p id="ps-text"></p>
+                <small>Prayer and worship reading for the day.</small
+                ><span class="seg-hint">Tap to read · KJV</span>
+              </div>
+              <div class="verses" id="v-ps" hidden></div>
+            </div>
+            <div class="segment" id="seg-pr">
+              <div class="seg-btn" role="button" tabindex="0" aria-expanded="false" data-k="pr">
+                <h3>Proverbs</h3>
+                <p id="pr-text"></p>
+                <small>Wisdom reading for everyday life.</small
+                ><span class="seg-hint">Tap to read · KJV</span>
+              </div>
+              <div class="verses" id="v-pr" hidden></div>
+            </div>
+          </div>
+          <div class="btn-row" style="margin-top: 18px">
+            <button class="complete" id="btn-complete" type="button">
+              <span id="check-mark">○</span><span id="complete-label">Mark Complete</span></button
+            ><button class="complete" id="btn-all" type="button">Read all · KJV</button
+            ><a href="#" class="readnow" id="btn-read" target="_blank" rel="noopener noreferrer"
+              >Open full reading</a
+            >
+          </div>
+          <div class="prayer-box">
+            <div class="label" style="margin-bottom: 10px">Daily Prayer</div>
+            <div class="prayer-title" id="prayer-title">Prayer for steady reading</div>
+            <div class="prayer-text" id="prayer-text">
+              Lord, help me receive Your Word with faith, attention, and obedience today. Teach me through
+              every part of today’s reading and keep me faithful through the year.
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="pad">
+          <div class="label">Journal Notes</div>
+          <textarea
+            id="notes"
+            placeholder="What stood out today? What did God show you through the Old Testament, New Testament, Psalm, or Proverbs reading?"
+          ></textarea>
+        </div>
+      </div>
+      <div class="card pad">
+        <div class="label">Quick actions</div>
+        <div class="btn-row">
+          <button class="btn-secondary" id="btn-copy" type="button">Copy today’s plan</button
+          ><button class="btn-secondary" id="btn-next-open" type="button">Next unfinished day</button>
+        </div>
+        <div class="row" style="margin-top: 10px">
+          <input class="go-input" type="number" min="1" id="go-day" placeholder="Go to day number" /><button
+            class="btn"
+            id="btn-go"
+            type="button"
+          >
+            Go
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+      // Reading plan is generated from the canonical book/chapter lists (identical to the original 365-day table).
+      const OT_BOOKS = [
+        ["Genesis", 50],
+        ["Exodus", 40],
+        ["Leviticus", 27],
+        ["Numbers", 36],
+        ["Deuteronomy", 34],
+        ["Joshua", 24],
+        ["Judges", 21],
+        ["Ruth", 4],
+        ["1 Samuel", 31],
+        ["2 Samuel", 24],
+        ["1 Kings", 22],
+        ["2 Kings", 25],
+        ["1 Chronicles", 29],
+      ];
+      const NT_BOOKS = [
+        ["Matthew", 28],
+        ["Mark", 16],
+        ["Luke", 24],
+        ["John", 21],
+        ["Acts", 28],
+        ["Romans", 16],
+        ["1 Corinthians", 16],
+        ["2 Corinthians", 13],
+        ["Galatians", 6],
+        ["Ephesians", 6],
+        ["Philippians", 4],
+        ["Colossians", 4],
+        ["1 Thessalonians", 5],
+        ["2 Thessalonians", 3],
+        ["1 Timothy", 6],
+        ["2 Timothy", 4],
+        ["Titus", 3],
+        ["Philemon", 1],
+        ["Hebrews", 13],
+        ["James", 5],
+        ["1 Peter", 5],
+        ["2 Peter", 3],
+        ["1 John", 5],
+        ["2 John", 1],
+        ["3 John", 1],
+        ["Jude", 1],
+        ["Revelation", 22],
+      ];
+      const flat = (books) =>
+        books.flatMap(([name, n]) => Array.from({ length: n }, (_, i) => `${name} ${i + 1}`));
+      const OT_LIST = flat(OT_BOOKS),
+        NT_LIST = flat(NT_BOOKS);
+      const readingPlan = Array.from({ length: 365 }, (_, i) => ({
+        day: i + 1,
+        ot: OT_LIST[i],
+        nt: NT_LIST[i % NT_LIST.length],
+        ps: `Psalm ${(i % 150) + 1}`,
+        pr: `Proverbs ${(i % 31) + 1}`,
+      }));
 
-const TOTAL_DAYS = 365;
-const memoryStore = {};
-const canUseStorage = (() => { try { const k='__dw_biay__'; localStorage.setItem(k,'1'); localStorage.removeItem(k); return true; } catch { return false; } })();
-const store = { get(k, fallback=null) { try { if (canUseStorage) { const raw = localStorage.getItem(k); return raw ? JSON.parse(raw) : fallback; } } catch {} return Object.prototype.hasOwnProperty.call(memoryStore,k) ? memoryStore[k] : fallback; }, set(k, v) { try { if (canUseStorage) { localStorage.setItem(k, JSON.stringify(v)); return; } } catch {} memoryStore[k] = v; } };
-let currentDay = store.get('biay_currentDay', 1) || 1; let completed = store.get('biay_done', {}) || {}; let notesData = store.get('biay_notes', {}) || {}; let startDate = store.get('biay_startDate', '') || '';
+      const TOTAL_DAYS = 365;
+      const memoryStore = {};
+      const canUseStorage = (() => {
+        try {
+          const k = "__dw_biay__";
+          localStorage.setItem(k, "1");
+          localStorage.removeItem(k);
+          return true;
+        } catch {
+          return false;
+        }
+      })();
+      const store = {
+        get(k, fallback = null) {
+          try {
+            if (canUseStorage) {
+              const raw = localStorage.getItem(k);
+              return raw ? JSON.parse(raw) : fallback;
+            }
+          } catch {}
+          return Object.prototype.hasOwnProperty.call(memoryStore, k) ? memoryStore[k] : fallback;
+        },
+        set(k, v) {
+          try {
+            if (canUseStorage) {
+              localStorage.setItem(k, JSON.stringify(v));
+              return;
+            }
+          } catch {}
+          memoryStore[k] = v;
+        },
+      };
+      let currentDay = store.get("biay_currentDay", 1) || 1;
+      let completed = store.get("biay_done", {}) || {};
+      let notesData = store.get("biay_notes", {}) || {};
+      let startDate = store.get("biay_startDate", "") || "";
 
-// Pause handling: the plan freezes after day `pauseAfter` for `skipDays` calendar days, then resumes,
-// so no backlog builds up and every later date (including the finish date) moves out by that many days.
-// Pauses: after Day N the plan freezes for D calendar days, then resumes, so no backlog builds up.
-// Dates after a pause (and the finish date) move out by D days. Several pauses stack.
-let pauses = store.get('biay_pauses', null);
-function startMid() { const st = parseLocalDate(startDate); if (!st) return null; return st; }
-function todayMid() { const t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
-if (!Array.isArray(pauses)) {
-  // carry over the earlier single pause (Days 1-70 original, Day 71 pinned to the date it was set)
-  pauses = [{ after: store.get('biay_pauseAfter', 70), days: store.get('biay_skipDays', 39) }];
-  store.set('biay_pauses', pauses);
-}
-if (store.get('biay_pauseV', 0) !== 4) {
-  // new pause: Day 100 is pinned to today
-  const st = parseLocalDate(startDate);
-  let days = 18; // fallback if no start date is saved
-  if (st) { const d100 = new Date(st); d100.setDate(d100.getDate() + 99 + pauses.reduce((n, p) => n + (p.after < 100 ? p.days : 0), 0)); days = Math.max(0, Math.round((todayMid() - d100) / 86400000)); }
-  pauses = pauses.filter(p => p.after !== 99).concat([{ after: 99, days }]);
-  store.set('biay_pauses', pauses); store.set('biay_pauseV', 4);
-  currentDay = 100; store.set('biay_currentDay', currentDay);
-}
-function lastPause() { return pauses.length ? pauses[pauses.length - 1] : { after: 0, days: 0 }; }
-function totalSkip() { return pauses.reduce((n, p) => n + p.days, 0); }
+      // Pause handling: the plan freezes after day `pauseAfter` for `skipDays` calendar days, then resumes,
+      // so no backlog builds up and every later date (including the finish date) moves out by that many days.
+      // Pauses: after Day N the plan freezes for D calendar days, then resumes, so no backlog builds up.
+      // Dates after a pause (and the finish date) move out by D days. Several pauses stack.
+      let pauses = store.get("biay_pauses", null);
+      function startMid() {
+        const st = parseLocalDate(startDate);
+        if (!st) return null;
+        return st;
+      }
+      function todayMid() {
+        const t = new Date();
+        return new Date(t.getFullYear(), t.getMonth(), t.getDate());
+      }
+      if (!Array.isArray(pauses)) {
+        // carry over the earlier single pause (Days 1-70 original, Day 71 pinned to the date it was set)
+        pauses = [{ after: store.get("biay_pauseAfter", 70), days: store.get("biay_skipDays", 39) }];
+        store.set("biay_pauses", pauses);
+      }
+      if (store.get("biay_pauseV", 0) !== 4) {
+        // new pause: Day 100 is pinned to today
+        const st = parseLocalDate(startDate);
+        let days = 18; // fallback if no start date is saved
+        if (st) {
+          const d100 = new Date(st);
+          d100.setDate(d100.getDate() + 99 + pauses.reduce((n, p) => n + (p.after < 100 ? p.days : 0), 0));
+          days = Math.max(0, Math.round((todayMid() - d100) / 86400000));
+        }
+        pauses = pauses.filter((p) => p.after !== 99).concat([{ after: 99, days }]);
+        store.set("biay_pauses", pauses);
+        store.set("biay_pauseV", 4);
+        currentDay = 100;
+        store.set("biay_currentDay", currentDay);
+      }
+      function lastPause() {
+        return pauses.length ? pauses[pauses.length - 1] : { after: 0, days: 0 };
+      }
+      function totalSkip() {
+        return pauses.reduce((n, p) => n + p.days, 0);
+      }
 
-const el = { setupHelp: document.getElementById('setup-help'), paceBadge: document.getElementById('pace-badge'), paceSummary: document.getElementById('pace-summary'), dayNumber: document.getElementById('day-number'), dayDate: document.getElementById('day-date'), readingTitle: document.getElementById('reading-title'), readingSub: document.getElementById('reading-sub'), themeBand: document.getElementById('theme-band'), otText: document.getElementById('ot-text'), ntText: document.getElementById('nt-text'), psText: document.getElementById('ps-text'), prText: document.getElementById('pr-text'), btnRead: document.getElementById('btn-read'), btnComplete: document.getElementById('btn-complete'), completeLabel: document.getElementById('complete-label'), checkMark: document.getElementById('check-mark'), notes: document.getElementById('notes'), prayerTitle: document.getElementById('prayer-title'), prayerText: document.getElementById('prayer-text'), toast: document.getElementById('toast'), startDate: document.getElementById('start-date'), btnToday: document.getElementById('btn-today'), btnStartToday: document.getElementById('btn-start-today'), btnPrev: document.getElementById('btn-prev'), btnNext: document.getElementById('btn-next'), btnCopy: document.getElementById('btn-copy'), btnNextOpen: document.getElementById('btn-next-open'), goDay: document.getElementById('go-day'), btnGo: document.getElementById('btn-go'), heroNote: document.getElementById('hero-note'), skipInput: document.getElementById('skip-days'), afterInput: document.getElementById('pause-after'), btnSkipSave: document.getElementById('btn-skip-save'), pauseHelp: document.getElementById('pause-help') };
-function parseLocalDate(ymd) { if (!ymd) return null; const [y,m,d] = ymd.split('-').map(Number); if (!y||!m||!d) return null; return new Date(y,m-1,d); }
-function formatDateLabel(dt) { return dt.toLocaleDateString(undefined, { weekday:'long', month:'short', day:'numeric' }); }
-function formatDateFull(dt) { return dt.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' }); }
-function getTodayLocalYMD() { const now = new Date(); return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`; }
-function clampDay(day) { return Math.max(1, Math.min(TOTAL_DAYS, Number(day)||1)); }
-function dayDateObj(day) { const dt = parseLocalDate(startDate); if (!dt) return null; dt.setDate(dt.getDate() + (day - 1) + pauses.reduce((n, p) => n + (day > p.after ? p.days : 0), 0)); return dt; }
-function dayToDate(day) { if (!startDate) return 'Choose a start date to map this reading to your calendar.'; const dt = dayDateObj(day); return dt ? formatDateLabel(dt) : 'Choose a valid start date.'; }
-function rawToDay(r) { let cum = 0; for (const p of [...pauses].sort((x, y) => x.after - y.after)) { if (r <= p.after + cum) return r - cum; if (r <= p.after + cum + p.days) return p.after; cum += p.days; } return r - cum; }
-function getDayFromStart(dateString) { const start = parseLocalDate(dateString); if (!start) return 1; const today = new Date(); const midnight = new Date(today.getFullYear(), today.getMonth(), today.getDate()); const raw = Math.floor((midnight - start) / 86400000) + 1; return clampDay(rawToDay(raw)); }
-function showToast(msg) { el.toast.textContent = msg; el.toast.classList.add('show'); clearTimeout(showToast.t); showToast.t = setTimeout(() => el.toast.classList.remove('show'), 1600); }
-function updatePace() { if (!startDate) { el.paceBadge.textContent = 'Ready'; el.paceSummary.textContent = 'Set your start date to see whether you are on pace.'; return; } const expected = getDayFromStart(startDate); const done = Object.values(completed).filter(Boolean).length; if (done >= expected) { el.paceBadge.textContent = 'On Pace'; el.paceSummary.textContent = `You have completed ${done} days, and your calendar currently points to Day ${expected}.`; } else { const gap = expected - done; el.paceBadge.textContent = `${gap} Behind`; el.paceSummary.textContent = `You are ${gap} day${gap === 1 ? '' : 's'} behind. Keep the daily rhythm and keep moving.`; } }
-function buildPrayer(dayData) { return { title: `Prayer for Day ${dayData.day}`, text: `Father, as I read ${dayData.ot}, ${dayData.nt}, ${dayData.ps}, and ${dayData.pr}, help me understand Your truth, worship You sincerely, walk in wisdom, and remain faithful through this one-year journey. Amen.` }; }
-function render() { currentDay = clampDay(currentDay); const dayData = readingPlan[currentDay - 1]; const prayer = buildPrayer(dayData); const isDone = !!completed[currentDay]; const params = new URLSearchParams({ search: `${dayData.ot}; ${dayData.nt}; ${dayData.ps}; ${dayData.pr}`, version: 'NIV' }); el.dayNumber.textContent = `Day ${currentDay}`; el.dayDate.textContent = dayToDate(currentDay); el.readingTitle.textContent = `Today’s plan covers this · Day ${currentDay}`; el.readingSub.textContent = 'A full Bible-in-a-year reading with Old Testament, New Testament, Psalm, and Proverbs.'; el.otText.textContent = dayData.ot; el.ntText.textContent = dayData.nt; el.psText.textContent = dayData.ps; el.prText.textContent = dayData.pr; el.prayerTitle.textContent = prayer.title; el.prayerText.textContent = prayer.text; el.themeBand.innerHTML = ['Bible in a year', 'OT + NT + Psalm + Proverbs', 'Daily rhythm'].map(x => `<span class="chip">${x}</span>`).join(''); el.btnRead.href = `https://www.biblegateway.com/passage/?${params.toString()}`; el.completeLabel.textContent = isDone ? 'Completed' : 'Mark Complete'; el.checkMark.textContent = isDone ? '✓' : '○'; el.btnComplete.className = 'complete' + (isDone ? ' done' : ''); el.notes.value = notesData[currentDay] || ''; el.startDate.value = startDate; el.skipInput.value = lastPause().days; el.afterInput.value = lastPause().after; el.btnPrev.disabled = currentDay === 1; el.btnNext.disabled = currentDay === TOTAL_DAYS; el.heroNote.textContent = startDate ? `Your calendar currently maps to Day ${getDayFromStart(startDate)}. Keep reading daily to finish the Bible in one year.` : 'A balanced one-year plan with daily Old Testament, New Testament, Psalm, and Proverbs readings, following the structure used by established Bible-in-a-year plans.'; if (!startDate) { el.setupHelp.textContent = 'Choose a start date so each reading maps to your calendar.'; el.pauseHelp.textContent = ''; } else { el.setupHelp.textContent = `Day 1 began on ${formatDateLabel(parseLocalDate(startDate))}. Today currently maps to Day ${getDayFromStart(startDate)}.`; el.pauseHelp.textContent = totalSkip() > 0 ? `${totalSkip()} days paused in total (${pauses.map(p => p.days + ' after Day ' + p.after).join(', ')}): no backlog, and the plan now ends on ${formatDateFull(dayDateObj(TOTAL_DAYS))}.` : `No pause applied. The plan ends on ${formatDateFull(dayDateObj(TOTAL_DAYS))}.`; } updatePace(); }
-function saveDay() { store.set('biay_currentDay', currentDay); } function changeDay(delta) { currentDay = clampDay(currentDay + delta); saveDay(); render(); } function jumpToday() { currentDay = getDayFromStart(startDate); saveDay(); render(); showToast('Jumped to today'); } function setStartToday() { startDate = getTodayLocalYMD(); pauses = []; store.set('biay_startDate', startDate); store.set('biay_pauses', pauses); currentDay = 1; saveDay(); render(); showToast('Start date set to today'); } function changeStartDate() { if (!el.startDate.value) return; startDate = el.startDate.value; store.set('biay_startDate', startDate); currentDay = getDayFromStart(startDate); saveDay(); render(); showToast('Start date updated'); } function toggleComplete() { completed[currentDay] = !completed[currentDay]; store.set('biay_done', completed); render(); showToast(completed[currentDay] ? 'Marked complete' : 'Marked incomplete'); } function saveNote() { notesData[currentDay] = el.notes.value; store.set('biay_notes', notesData); }
-function saveSkip() { const n = Math.max(0, Math.floor(Number(el.skipInput.value) || 0)); const a = Math.min(TOTAL_DAYS, Math.max(0, Math.floor(Number(el.afterInput.value) || 0))); if (pauses.length) { pauses[pauses.length - 1] = { after: a, days: n }; } else { pauses.push({ after: a, days: n }); } store.set('biay_pauses', pauses); render(); showToast('Pause saved'); }
-async function copyPlan() { const d = readingPlan[currentDay - 1]; const text = `Day ${currentDay}: ${d.ot} | ${d.nt} | ${d.ps} | ${d.pr}`; try { if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(text); showToast('Plan copied'); } } catch { showToast('Copy not supported here'); } }
-function nextOpen() { for (let i=currentDay;i<=TOTAL_DAYS;i++) if (!completed[i]) { currentDay=i; saveDay(); render(); showToast(`Moved to Day ${i}`); return; } for (let i=1;i<currentDay;i++) if (!completed[i]) { currentDay=i; saveDay(); render(); showToast(`Moved to Day ${i}`); return; } showToast('All days completed'); } function goToDay() { currentDay = clampDay(el.goDay.value); saveDay(); render(); showToast(`Moved to Day ${currentDay}`); el.goDay.value=''; }
-el.btnToday.addEventListener('click', jumpToday); el.btnStartToday.addEventListener('click', setStartToday); el.startDate.addEventListener('change', changeStartDate); el.btnPrev.addEventListener('click', () => changeDay(-1)); el.btnNext.addEventListener('click', () => changeDay(1)); el.btnComplete.addEventListener('click', toggleComplete); el.notes.addEventListener('input', saveNote); el.btnCopy.addEventListener('click', copyPlan); el.btnNextOpen.addEventListener('click', nextOpen); el.btnGo.addEventListener('click', goToDay); el.btnSkipSave.addEventListener('click', saveSkip); el.goDay.addEventListener('keydown', e => { if (e.key === 'Enter') goToDay(); });
-render();
-  </script>
-</body>
+      const el = {
+        setupHelp: document.getElementById("setup-help"),
+        paceBadge: document.getElementById("pace-badge"),
+        paceSummary: document.getElementById("pace-summary"),
+        dayNumber: document.getElementById("day-number"),
+        dayDate: document.getElementById("day-date"),
+        readingTitle: document.getElementById("reading-title"),
+        readingSub: document.getElementById("reading-sub"),
+        themeBand: document.getElementById("theme-band"),
+        otText: document.getElementById("ot-text"),
+        ntText: document.getElementById("nt-text"),
+        psText: document.getElementById("ps-text"),
+        prText: document.getElementById("pr-text"),
+        btnRead: document.getElementById("btn-read"),
+        btnComplete: document.getElementById("btn-complete"),
+        completeLabel: document.getElementById("complete-label"),
+        checkMark: document.getElementById("check-mark"),
+        notes: document.getElementById("notes"),
+        prayerTitle: document.getElementById("prayer-title"),
+        prayerText: document.getElementById("prayer-text"),
+        toast: document.getElementById("toast"),
+        startDate: document.getElementById("start-date"),
+        btnToday: document.getElementById("btn-today"),
+        btnStartToday: document.getElementById("btn-start-today"),
+        btnPrev: document.getElementById("btn-prev"),
+        btnNext: document.getElementById("btn-next"),
+        btnCopy: document.getElementById("btn-copy"),
+        btnNextOpen: document.getElementById("btn-next-open"),
+        goDay: document.getElementById("go-day"),
+        btnGo: document.getElementById("btn-go"),
+        heroNote: document.getElementById("hero-note"),
+        skipInput: document.getElementById("skip-days"),
+        afterInput: document.getElementById("pause-after"),
+        btnSkipSave: document.getElementById("btn-skip-save"),
+        pauseHelp: document.getElementById("pause-help"),
+      };
+      function parseLocalDate(ymd) {
+        if (!ymd) return null;
+        const [y, m, d] = ymd.split("-").map(Number);
+        if (!y || !m || !d) return null;
+        return new Date(y, m - 1, d);
+      }
+      function formatDateLabel(dt) {
+        return dt.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" });
+      }
+      function formatDateFull(dt) {
+        return dt.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+      }
+      function getTodayLocalYMD() {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+      }
+      function clampDay(day) {
+        return Math.max(1, Math.min(TOTAL_DAYS, Number(day) || 1));
+      }
+      function dayDateObj(day) {
+        const dt = parseLocalDate(startDate);
+        if (!dt) return null;
+        dt.setDate(dt.getDate() + (day - 1) + pauses.reduce((n, p) => n + (day > p.after ? p.days : 0), 0));
+        return dt;
+      }
+      function dayToDate(day) {
+        if (!startDate) return "Choose a start date to map this reading to your calendar.";
+        const dt = dayDateObj(day);
+        return dt ? formatDateLabel(dt) : "Choose a valid start date.";
+      }
+      function rawToDay(r) {
+        let cum = 0;
+        for (const p of [...pauses].sort((x, y) => x.after - y.after)) {
+          if (r <= p.after + cum) return r - cum;
+          if (r <= p.after + cum + p.days) return p.after;
+          cum += p.days;
+        }
+        return r - cum;
+      }
+      function getDayFromStart(dateString) {
+        const start = parseLocalDate(dateString);
+        if (!start) return 1;
+        const today = new Date();
+        const midnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const raw = Math.floor((midnight - start) / 86400000) + 1;
+        return clampDay(rawToDay(raw));
+      }
+      function showToast(msg) {
+        el.toast.textContent = msg;
+        el.toast.classList.add("show");
+        clearTimeout(showToast.t);
+        showToast.t = setTimeout(() => el.toast.classList.remove("show"), 1600);
+      }
+      function updatePace() {
+        if (!startDate) {
+          el.paceBadge.textContent = "Ready";
+          el.paceSummary.textContent = "Set your start date to see whether you are on pace.";
+          return;
+        }
+        const expected = getDayFromStart(startDate);
+        const done = Object.values(completed).filter(Boolean).length;
+        if (done >= expected) {
+          el.paceBadge.textContent = "On Pace";
+          el.paceSummary.textContent = `You have completed ${done} days, and your calendar currently points to Day ${expected}.`;
+        } else {
+          const gap = expected - done;
+          el.paceBadge.textContent = `${gap} Behind`;
+          el.paceSummary.textContent = `You are ${gap} day${gap === 1 ? "" : "s"} behind. Keep the daily rhythm and keep moving.`;
+        }
+      }
+      function buildPrayer(dayData) {
+        return {
+          title: `Prayer for Day ${dayData.day}`,
+          text: `Father, as I read ${dayData.ot}, ${dayData.nt}, ${dayData.ps}, and ${dayData.pr}, help me understand Your truth, worship You sincerely, walk in wisdom, and remain faithful through this one-year journey. Amen.`,
+        };
+      }
+      function render() {
+        currentDay = clampDay(currentDay);
+        if (lastDayRendered !== null && lastDayRendered !== currentDay) resetSegs();
+        lastDayRendered = currentDay;
+        const dayData = readingPlan[currentDay - 1];
+        const prayer = buildPrayer(dayData);
+        const isDone = !!completed[currentDay];
+        const params = new URLSearchParams({
+          search: `${dayData.ot}; ${dayData.nt}; ${dayData.ps}; ${dayData.pr}`,
+          version: "NIV",
+        });
+        el.dayNumber.textContent = `Day ${currentDay}`;
+        el.dayDate.textContent = dayToDate(currentDay);
+        el.readingTitle.textContent = `Today’s plan covers this · Day ${currentDay}`;
+        el.readingSub.textContent =
+          "A full Bible-in-a-year reading with Old Testament, New Testament, Psalm, and Proverbs.";
+        el.otText.textContent = dayData.ot;
+        el.ntText.textContent = dayData.nt;
+        el.psText.textContent = dayData.ps;
+        el.prText.textContent = dayData.pr;
+        el.prayerTitle.textContent = prayer.title;
+        el.prayerText.textContent = prayer.text;
+        el.themeBand.innerHTML = ["Bible in a year", "OT + NT + Psalm + Proverbs", "Daily rhythm"]
+          .map((x) => `<span class="chip">${x}</span>`)
+          .join("");
+        el.btnRead.href = `https://www.biblegateway.com/passage/?${params.toString()}`;
+        el.completeLabel.textContent = isDone ? "Completed" : "Mark Complete";
+        el.checkMark.textContent = isDone ? "✓" : "○";
+        el.btnComplete.className = "complete" + (isDone ? " done" : "");
+        el.notes.value = notesData[currentDay] || "";
+        el.startDate.value = startDate;
+        el.skipInput.value = lastPause().days;
+        el.afterInput.value = lastPause().after;
+        el.btnPrev.disabled = currentDay === 1;
+        el.btnNext.disabled = currentDay === TOTAL_DAYS;
+        el.heroNote.textContent = startDate
+          ? `Your calendar currently maps to Day ${getDayFromStart(startDate)}. Keep reading daily to finish the Bible in one year.`
+          : "A balanced one-year plan with daily Old Testament, New Testament, Psalm, and Proverbs readings, following the structure used by established Bible-in-a-year plans.";
+        if (!startDate) {
+          el.setupHelp.textContent = "Choose a start date so each reading maps to your calendar.";
+          el.pauseHelp.textContent = "";
+        } else {
+          el.setupHelp.textContent = `Day 1 began on ${formatDateLabel(parseLocalDate(startDate))}. Today currently maps to Day ${getDayFromStart(startDate)}.`;
+          el.pauseHelp.textContent =
+            totalSkip() > 0
+              ? `${totalSkip()} days paused in total (${pauses.map((p) => p.days + " after Day " + p.after).join(", ")}): no backlog, and the plan now ends on ${formatDateFull(dayDateObj(TOTAL_DAYS))}.`
+              : `No pause applied. The plan ends on ${formatDateFull(dayDateObj(TOTAL_DAYS))}.`;
+        }
+        updatePace();
+      }
+      function saveDay() {
+        store.set("biay_currentDay", currentDay);
+      }
+      function changeDay(delta) {
+        currentDay = clampDay(currentDay + delta);
+        saveDay();
+        render();
+      }
+      function jumpToday() {
+        currentDay = getDayFromStart(startDate);
+        saveDay();
+        render();
+        showToast("Jumped to today");
+      }
+      function setStartToday() {
+        startDate = getTodayLocalYMD();
+        pauses = [];
+        store.set("biay_startDate", startDate);
+        store.set("biay_pauses", pauses);
+        currentDay = 1;
+        saveDay();
+        render();
+        showToast("Start date set to today");
+      }
+      function changeStartDate() {
+        if (!el.startDate.value) return;
+        startDate = el.startDate.value;
+        store.set("biay_startDate", startDate);
+        currentDay = getDayFromStart(startDate);
+        saveDay();
+        render();
+        showToast("Start date updated");
+      }
+      function toggleComplete() {
+        completed[currentDay] = !completed[currentDay];
+        store.set("biay_done", completed);
+        render();
+        showToast(completed[currentDay] ? "Marked complete" : "Marked incomplete");
+      }
+      function saveNote() {
+        notesData[currentDay] = el.notes.value;
+        store.set("biay_notes", notesData);
+      }
+      function saveSkip() {
+        const n = Math.max(0, Math.floor(Number(el.skipInput.value) || 0));
+        const a = Math.min(TOTAL_DAYS, Math.max(0, Math.floor(Number(el.afterInput.value) || 0)));
+        if (pauses.length) {
+          pauses[pauses.length - 1] = { after: a, days: n };
+        } else {
+          pauses.push({ after: a, days: n });
+        }
+        store.set("biay_pauses", pauses);
+        render();
+        showToast("Pause saved");
+      }
+      async function copyPlan() {
+        const d = readingPlan[currentDay - 1];
+        const text = `Day ${currentDay}: ${d.ot} | ${d.nt} | ${d.ps} | ${d.pr}`;
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+            showToast("Plan copied");
+          }
+        } catch {
+          showToast("Copy not supported here");
+        }
+      }
+      function nextOpen() {
+        for (let i = currentDay; i <= TOTAL_DAYS; i++)
+          if (!completed[i]) {
+            currentDay = i;
+            saveDay();
+            render();
+            showToast(`Moved to Day ${i}`);
+            return;
+          }
+        for (let i = 1; i < currentDay; i++)
+          if (!completed[i]) {
+            currentDay = i;
+            saveDay();
+            render();
+            showToast(`Moved to Day ${i}`);
+            return;
+          }
+        showToast("All days completed");
+      }
+      function goToDay() {
+        currentDay = clampDay(el.goDay.value);
+        saveDay();
+        render();
+        showToast(`Moved to Day ${currentDay}`);
+        el.goDay.value = "";
+      }
+
+      // ---- KJV reader: tap a reading to reveal the King James text (public domain), fetched on demand and cached ----
+      const KJV_FIX = {
+        "Philemon 1": "Philemon 1:1-25",
+        "2 John 1": "2 John 1:1-13",
+        "3 John 1": "3 John 1:1-14",
+        "Jude 1": "Jude 1:1-25",
+      };
+      const kjvMem = {};
+      function kjvGetCache(ref) {
+        if (kjvMem[ref]) return kjvMem[ref];
+        try {
+          const c = JSON.parse(localStorage.getItem("biay_kjv_" + ref) || "null");
+          if (c) kjvMem[ref] = c;
+          return c;
+        } catch {
+          return null;
+        }
+      }
+      function kjvSetCache(ref, v) {
+        kjvMem[ref] = v;
+        try {
+          localStorage.setItem("biay_kjv_" + ref, JSON.stringify(v));
+        } catch {}
+      }
+      let kjvBook = null;
+      function loadKJVBook() {
+        if (!kjvBook)
+          kjvBook = fetch("kjv.json")
+            .then((r) => {
+              if (!r.ok) throw new Error("HTTP " + r.status);
+              return r.json();
+            })
+            .catch((e) => {
+              kjvBook = null;
+              throw e;
+            });
+        return kjvBook;
+      }
+      async function fetchKJV(ref) {
+        const hit = kjvGetCache(ref);
+        if (hit) return hit;
+        try {
+          // bundled King James text (public domain) shipped with the app
+          const book = await loadKJVBook();
+          if (book[ref]) {
+            const v = book[ref].map((t, i) => ({ n: i + 1, t }));
+            kjvMem[ref] = v;
+            return v;
+          }
+        } catch {}
+        // fallback: public KJV API
+        const q = KJV_FIX[ref] || ref;
+        const r = await fetch("https://bible-api.com/" + encodeURIComponent(q) + "?translation=kjv");
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        const j = await r.json();
+        if (!j.verses || !j.verses.length) throw new Error("No verses");
+        const v = j.verses.map((x) => ({ n: x.verse, t: String(x.text).replace(/\s+/g, " ").trim() }));
+        kjvSetCache(ref, v);
+        return v;
+      }
+      const SEG_KEYS = ["ot", "nt", "ps", "pr"];
+      function segRef(k) {
+        return readingPlan[currentDay - 1][k];
+      }
+      function setSeg(k, open) {
+        const seg = document.getElementById("seg-" + k);
+        seg.classList.toggle("open", open);
+        seg.querySelector(".seg-btn").setAttribute("aria-expanded", String(open));
+        document.getElementById("v-" + k).hidden = !open;
+      }
+      async function openSeg(k) {
+        setSeg(k, true);
+        const box = document.getElementById("v-" + k),
+          ref = segRef(k),
+          day = currentDay;
+        box.textContent = "";
+        const loading = document.createElement("span");
+        loading.className = "vmsg";
+        loading.textContent = "Loading " + ref + "…";
+        box.appendChild(loading);
+        try {
+          const verses = await fetchKJV(ref);
+          if (day !== currentDay) return;
+          box.textContent = "";
+          verses.forEach((v) => {
+            const sp = document.createElement("span");
+            sp.className = "v";
+            const sup = document.createElement("sup");
+            sup.textContent = v.n;
+            sp.appendChild(sup);
+            sp.appendChild(document.createTextNode(v.t + " "));
+            box.appendChild(sp);
+          });
+          const src = document.createElement("span");
+          src.className = "vsrc";
+          src.textContent = ref + " · King James Version";
+          box.appendChild(src);
+        } catch (e) {
+          if (day !== currentDay) return;
+          box.textContent = "";
+          const m = document.createElement("span");
+          m.className = "vmsg";
+          m.append("Could not load " + ref + ". Check your connection, then ");
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = "try again";
+          b.addEventListener("click", (e2) => {
+            e2.stopPropagation();
+            openSeg(k);
+          });
+          m.appendChild(b);
+          m.append(" or use “Open full reading”.");
+          box.appendChild(m);
+        }
+      }
+      function toggleSeg(k) {
+        const open = document.getElementById("seg-" + k).classList.contains("open");
+        if (open) setSeg(k, false);
+        else openSeg(k);
+      }
+      function resetSegs() {
+        SEG_KEYS.forEach((k) => setSeg(k, false));
+      }
+      function toggleAll() {
+        const allOpen = SEG_KEYS.every((k) => document.getElementById("seg-" + k).classList.contains("open"));
+        if (allOpen) resetSegs();
+        else
+          SEG_KEYS.forEach((k) => {
+            if (!document.getElementById("seg-" + k).classList.contains("open")) openSeg(k);
+          });
+      }
+      document.querySelectorAll(".seg-btn").forEach((b) => {
+        b.addEventListener("click", () => toggleSeg(b.dataset.k));
+        b.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleSeg(b.dataset.k);
+          }
+        });
+      });
+      document.getElementById("btn-all").addEventListener("click", toggleAll);
+      let lastDayRendered = null;
+      el.btnToday.addEventListener("click", jumpToday);
+      el.btnStartToday.addEventListener("click", setStartToday);
+      el.startDate.addEventListener("change", changeStartDate);
+      el.btnPrev.addEventListener("click", () => changeDay(-1));
+      el.btnNext.addEventListener("click", () => changeDay(1));
+      el.btnComplete.addEventListener("click", toggleComplete);
+      el.notes.addEventListener("input", saveNote);
+      el.btnCopy.addEventListener("click", copyPlan);
+      el.btnNextOpen.addEventListener("click", nextOpen);
+      el.btnGo.addEventListener("click", goToDay);
+      el.btnSkipSave.addEventListener("click", saveSkip);
+      el.goDay.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") goToDay();
+      });
+      render();
+    </script>
+  </body>
 </html>
