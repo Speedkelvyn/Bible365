@@ -824,6 +824,12 @@
       };
       let currentDay = store.get("biay_currentDay", 1) || 1;
       let completed = store.get("biay_done", {}) || {};
+      // One-time: Days 1-99 were read before the Day 100 restart, so mark them complete.
+      if (store.get("biay_doneV", 0) !== 1) {
+        for (let d = 1; d <= 99; d++) completed[d] = true;
+        store.set("biay_done", completed);
+        store.set("biay_doneV", 1);
+      }
       let notesData = store.get("biay_notes", {}) || {};
       let startDate = store.get("biay_startDate", "") || "";
 
