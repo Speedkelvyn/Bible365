@@ -40,12 +40,39 @@ _PLAN_RE = re.compile(
 # --------------------------------------------------------------------------- plan
 
 
+_BOOKS_RE = re.compile(r"const\s+(OT|NT)_BOOKS\s*=\s*\[(.*?)\];", re.S)
+_BOOK_RE = re.compile(r"""\[\s*(["'])(.*?)\1\s*,\s*(\d+)\s*\]""")
+
+
+def _plan_from_books(text: str) -> list[dict]:
+    """Rebuild the plan the way the page does: one chapter of OT_BOOKS and NT_BOOKS a day, Psalms 1-150, Proverbs 1-31."""
+    books = {k: [(m[1], int(m[2])) for m in _BOOK_RE.findall(body)] for k, body in _BOOKS_RE.findall(text)}
+    if not books.get("OT") or not books.get("NT"):
+        return []
+    ot = [f"{name} {c}" for name, n in books["OT"] for c in range(1, n + 1)]
+    nt = [f"{name} {c}" for name, n in books["NT"] for c in range(1, n + 1)]
+    if len(ot) < TOTAL_DAYS:
+        return []
+    return [
+        {
+            "day": i + 1,
+            "ot": ot[i],
+            "nt": nt[i % len(nt)],
+            "ps": f"Psalm {i % 150 + 1}",
+            "pr": f"Proverbs {i % 31 + 1}",
+        }
+        for i in range(TOTAL_DAYS)
+    ]
+
+
 def load_plan(html_path: pathlib.Path = HERE / "index.html") -> list[dict]:
     """Read the 365-day reading plan from the web page."""
     text = html_path.read_text(encoding="utf-8")
     plan = [
         {"day": int(m[0]), "ot": m[2], "nt": m[4], "ps": m[6], "pr": m[8]} for m in _PLAN_RE.findall(text)
     ]
+    if not plan:
+        plan = _plan_from_books(text)
     if len(plan) != TOTAL_DAYS or [p["day"] for p in plan] != list(range(1, TOTAL_DAYS + 1)):
         raise ValueError(f"expected days 1–{TOTAL_DAYS} in {html_path.name}, found {len(plan)}")
     return plan
