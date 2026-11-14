@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Speedkelvyn/Bible365/actions/workflows/ci.yml/badge.svg)](https://github.com/Speedkelvyn/Bible365/actions/workflows/ci.yml)
 
-A one-year Bible reading plan in a single web page. Each day pairs an Old Testament, New Testament, Psalm and Proverbs reading, so the whole Bible is covered in 365 days with variety every day.
+A one-year Bible reading plan in a single web page. Each day pairs an Old Testament, New Testament, Psalm and Wisdom & Prophets reading (Proverbs onward through the prophets, then Job, Ezra and Nehemiah), so almost the whole Bible is covered in 365 days with variety every day.
 
 **Live app:** https://speedkelvyn.github.io/Bible365/
 
