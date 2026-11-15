@@ -836,6 +836,23 @@
         currentDay = 100;
         store.set("biay_currentDay", currentDay);
       }
+      // Day 100 was read on Nov 14, 2026. Work the pauses out from the saved start date so that
+      // always holds, whatever start date is set (up to 39 days after Day 70, the rest after Day 99).
+      const ANCHOR_DAY = 100,
+        ANCHOR_DATE = "2026-11-14";
+      function applyAnchor() {
+        const st = parseLocalDate(startDate);
+        if (!st || store.get("biay_anchorOff", false)) return;
+        const gap = Math.round((parseLocalDate(ANCHOR_DATE) - st) / 86400000) - (ANCHOR_DAY - 1);
+        const first = Math.min(39, Math.max(0, gap)),
+          second = Math.max(0, gap - first);
+        pauses = [
+          { after: 70, days: first },
+          { after: 99, days: second },
+        ].concat(pauses.filter((p) => p.after >= ANCHOR_DAY));
+        store.set("biay_pauses", pauses);
+      }
+      applyAnchor();
       function totalSkip() {
         return pauses.reduce((n, p) => n + p.days, 0);
       }
@@ -1008,6 +1025,7 @@
       function setStartToday() {
         startDate = getTodayLocalYMD();
         pauses = [];
+        store.set("biay_anchorOff", true);
         store.set("biay_startDate", startDate);
         store.set("biay_pauses", pauses);
         currentDay = 1;
@@ -1019,6 +1037,7 @@
         if (!el.startDate.value) return;
         startDate = el.startDate.value;
         store.set("biay_startDate", startDate);
+        applyAnchor();
         currentDay = getDayFromStart(startDate);
         saveDay();
         render();
