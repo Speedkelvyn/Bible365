@@ -199,22 +199,6 @@
       .btn:hover {
         background: var(--navy-2);
       }
-      .fld {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        flex: 1 1 140px;
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-      .fld .input {
-        flex: none;
-        text-transform: none;
-        letter-spacing: 0;
-      }
       .helper {
         font-size: 14px;
         line-height: 1.6;
@@ -561,21 +545,6 @@
           /><button class="btn-primary" id="btn-start-today" type="button">Start Today</button>
         </div>
         <div class="helper" id="setup-help">Choose a start date so each reading maps to your calendar.</div>
-        <div class="row" style="margin-top: 14px">
-          <label class="fld"
-            ><span>Paused after day</span
-            ><input
-              class="input"
-              type="number"
-              min="0"
-              id="pause-after"
-              placeholder="Paused after day" /></label
-          ><label class="fld"
-            ><span>Days paused</span
-            ><input class="input" type="number" min="0" id="skip-days" placeholder="Days paused" /></label
-          ><button class="btn-secondary" id="btn-skip-save" type="button">Save pause</button>
-        </div>
-        <div class="helper" id="pause-help"></div>
       </div>
       <div class="card pad">
         <div class="label">Why this works</div>
@@ -867,9 +836,6 @@
         currentDay = 100;
         store.set("biay_currentDay", currentDay);
       }
-      function lastPause() {
-        return pauses.length ? pauses[pauses.length - 1] : { after: 0, days: 0 };
-      }
       function totalSkip() {
         return pauses.reduce((n, p) => n + p.days, 0);
       }
@@ -905,10 +871,6 @@
         goDay: document.getElementById("go-day"),
         btnGo: document.getElementById("btn-go"),
         heroNote: document.getElementById("hero-note"),
-        skipInput: document.getElementById("skip-days"),
-        afterInput: document.getElementById("pause-after"),
-        btnSkipSave: document.getElementById("btn-skip-save"),
-        pauseHelp: document.getElementById("pause-help"),
       };
       function parseLocalDate(ymd) {
         if (!ymd) return null;
@@ -1017,8 +979,6 @@
         el.btnComplete.className = "complete" + (isDone ? " done" : "");
         el.notes.value = notesData[currentDay] || "";
         el.startDate.value = startDate;
-        el.skipInput.value = lastPause().days;
-        el.afterInput.value = lastPause().after;
         el.btnPrev.disabled = currentDay === 1;
         el.btnNext.disabled = currentDay === TOTAL_DAYS;
         el.heroNote.textContent = startDate
@@ -1026,13 +986,8 @@
           : "A balanced one-year plan with daily Old Testament, New Testament, Psalm, and Wisdom & Prophets readings, following the structure used by established Bible-in-a-year plans.";
         if (!startDate) {
           el.setupHelp.textContent = "Choose a start date so each reading maps to your calendar.";
-          el.pauseHelp.textContent = "";
         } else {
-          el.setupHelp.textContent = `Day 1 began on ${formatDateLabel(parseLocalDate(startDate))}. Today currently maps to Day ${getDayFromStart(startDate)}.`;
-          el.pauseHelp.textContent =
-            totalSkip() > 0
-              ? `${totalSkip()} days paused in total (${pauses.map((p) => p.days + " after Day " + p.after).join(", ")}): no backlog, and the plan now ends on ${formatDateFull(dayDateObj(TOTAL_DAYS))}.`
-              : `No pause applied. The plan ends on ${formatDateFull(dayDateObj(TOTAL_DAYS))}.`;
+          el.setupHelp.textContent = `Day 1 began on ${formatDateLabel(parseLocalDate(startDate))}. Today currently maps to Day ${getDayFromStart(startDate)}, and the plan ends on ${formatDateFull(dayDateObj(TOTAL_DAYS))}.`;
         }
         updatePace();
       }
@@ -1078,18 +1033,6 @@
       function saveNote() {
         notesData[currentDay] = el.notes.value;
         store.set("biay_notes", notesData);
-      }
-      function saveSkip() {
-        const n = Math.max(0, Math.floor(Number(el.skipInput.value) || 0));
-        const a = Math.min(TOTAL_DAYS, Math.max(0, Math.floor(Number(el.afterInput.value) || 0)));
-        if (pauses.length) {
-          pauses[pauses.length - 1] = { after: a, days: n };
-        } else {
-          pauses.push({ after: a, days: n });
-        }
-        store.set("biay_pauses", pauses);
-        render();
-        showToast("Pause saved");
       }
       async function copyPlan() {
         const d = readingPlan[currentDay - 1];
@@ -1282,7 +1225,6 @@
       el.btnCopy.addEventListener("click", copyPlan);
       el.btnNextOpen.addEventListener("click", nextOpen);
       el.btnGo.addEventListener("click", goToDay);
-      el.btnSkipSave.addEventListener("click", saveSkip);
       el.goDay.addEventListener("keydown", (e) => {
         if (e.key === "Enter") goToDay();
       });
